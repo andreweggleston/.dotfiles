@@ -21,7 +21,7 @@ in
     enable = true;
 
     globals = {
-      mapleader = ";";
+      mapleader = " ";
       rust_recommended_style = false;
     };
 
@@ -104,8 +104,6 @@ in
         respectBufCwd = true;
         updateFocusedFile.enable = true;
       };
-
-      comment-nvim.enable = true;
 
       nvim-cmp = {
         enable = true;
