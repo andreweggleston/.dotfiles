@@ -5,7 +5,7 @@
 
   ];
 
-  colorScheme = lib.mkDefault inputs.nix-colors.colorSchemes.dracula;
+  colorScheme = lib.mkDefault inputs.nix-colors.colorSchemes.nord;
 
   # write the color scheme to a CSS file for future reference
   home.file.".config/colors/colorscheme.css".text = let 

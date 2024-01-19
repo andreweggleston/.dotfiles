@@ -15,12 +15,15 @@
       ../../common.nix
 
       # enable various features
-      # ../../features/sound.nix
-      # ../../features/bluetooth.nix
+      ../../features/sound.nix
+      ../../features/bluetooth.nix
       ../../features/sway.nix
 
       # font config
       ../../features/hidpi.nix
+
+      # printing
+      ../../features/printing.nix
 
       # key mappings
       # outputs.nixosModules.dual-function-keys
