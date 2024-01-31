@@ -53,7 +53,9 @@
 
   # services.speakersafetyd.enable = true;
 
-  environment.systemPackages = [ ];
+  environment.systemPackages = [ 
+    pkgs.networkmanagerapplet
+  ];
 
 
   # asahi linux overlay
@@ -85,11 +87,25 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
 
-  networking.hostName = "macbook-nixos"; # Define your hostname.
-  networking.wireless.iwd = {
-    enable = true;
-    settings.General.EnableNetworkConfiguration = true;
+
+  networking = {
+    hostName = "macbook-nixos";
+    wireless = {
+      iwd = {
+        enable = true;
+        settings.General.EnableNetworkConfiguration = true;
+      };
+    };
+    networkmanager = {
+      enable = true;
+      wifi.backend = "iwd";
+      plugins = [
+        pkgs.networkmanager-openconnect
+        pkgs.networkmanager-openvpn
+      ];
+    };
   };
+  programs.nm-applet.enable = true;
 
   system.stateVersion = "23.11";
 }

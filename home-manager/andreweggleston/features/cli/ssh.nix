@@ -12,6 +12,11 @@
       #   hostname = {hostname};
       #   user = {user};
       # };
+
+      uml = {
+        hostname = "cs.uml.edu";
+        user = "aegglest";
+      };
     };
   };
 }
