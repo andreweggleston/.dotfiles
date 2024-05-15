@@ -25,10 +25,9 @@ in
           nix-search = "nix-env -qaP";
           http = "${pkgs.xh}/bin/xh";
           cdrr = "cd (git repo-root)";
-          vim = "${pkgs.neovim}/bin/nvim";
-        }
-        // optionalAttrs isDarwin {
-          idea = "open -an 'IntelliJ IDEA.app'";
+        #}
+        #// optionalAttrs isDarwin {
+        #  idea = "open -an 'IntelliJ IDEA.app'";
         };
 
       functions = {
