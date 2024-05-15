@@ -20,6 +20,9 @@ in
   programs.nixvim = {
     enable = true;
 
+    viAlias = true;
+    vimAlias = true;
+
     globals = {
       mapleader = " ";
       rust_recommended_style = false;
@@ -168,13 +171,15 @@ in
         enable = true;
 
         servers = {
-          jsonls.enable = true;
+          clangd.enable = true;
+          cmake.enable = true;
           rnix-lsp.enable = true;
+
         };
       };
 
       treesitter = {
-        enable = false; # TODO: figure out a smaller set of grammars - "all" takes forever to download
+        enable = true; # TODO: figure out a smaller set of grammars - "all" takes forever to download
         ensureInstalled = "all";
       };
     };
