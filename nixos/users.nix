@@ -6,7 +6,7 @@
         shell = pkgs.fish;
 
         openssh.authorizedKeys.keys = [ 
-
+          
         ];
     };
 

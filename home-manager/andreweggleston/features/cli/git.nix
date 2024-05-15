@@ -1,14 +1,9 @@
 { config, pkgs, ... }:
 {
-    home.file.".config/git/config-sharefile.inc".text = ''
-      [user]
-        email = "yusef.napora@citrix.com"
-    '';
-
     programs.git = { 
         enable = true;
-        userName = "Yusef Napora";
-        userEmail = "yusef@napora.org";
+        userName = "Andrew Eggleston";
+        userEmail = "egglestonandrew927@gmail.com";
         aliases = {
             upstream-name = "!git remote | egrep -o '(upstream|origin)' | tail -1";
             head-branch = "!basename $(git symbolic-ref refs/remotes/$(git upstream-name)/HEAD)";
