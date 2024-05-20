@@ -22,12 +22,6 @@ in
       enableFishIntegration = true;
       settings = {
         format = "$username$hostname$directory$git_branch$git_commit$git_state$git_status$c$ocaml$rust$nix_shell$direnv$status$battery\n$character";
-        battery = {
-          display = {
-            threshold = 30;
-            style = "bold red";
-          };
-        };
       };
     };
 
