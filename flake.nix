@@ -45,7 +45,7 @@
       forAllSystems = nixpkgs.lib.genAttrs [
         "aarch64-linux"
         # "i686-linux"
-        # "x86_64-linux"
+        "x86_64-linux"
         # "aarch64-darwin"
         # "x86_64-darwin"
       ];
@@ -93,6 +93,8 @@
       nixosConfigurations = {
         # rose gold m2 macbook air
         macbook-nixos = mkNixos [ ./nixos/hosts/macbook-nixos ];
+        # vm on kilpisjarvi
+        nix-devbox = mkNixos [ ./nixos/hosts/nix-devbox ];
       };
 
       darwinConfigurations = {
