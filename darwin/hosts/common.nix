@@ -22,7 +22,6 @@ in
     pkgs.vim
     pkgs.fish
     pkgs.rustup
-    pkgs.alacritty
   ];
 
   security.pam.enableSudoTouchIdAuth = true;
