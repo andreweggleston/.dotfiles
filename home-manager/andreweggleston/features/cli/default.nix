@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 {
   imports = [
     ./fish.nix
@@ -6,7 +6,6 @@
     ./git.nix
     ./helix.nix
     ./npm.nix
-    ./nvim
     ./ssh.nix
     ./tmux.nix
   ];
@@ -30,6 +29,7 @@
       xh
       just
       ;
+    neovim = inputs.nixvim.packages.${pkgs.system}.default;
     };
 
   programs = {

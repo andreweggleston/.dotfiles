@@ -29,7 +29,7 @@
     nix-colors.url = "github:misterio77/nix-colors";
 
     nixvim = {
-      url = "github:nix-community/nixvim";
+      url = "github:andreweggleston/nixvim";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
