@@ -34,7 +34,7 @@ in
   services.skhd = let 
     hyper = "cmd + ctrl + alt";
     yabai = "${pkgs.yabai}/bin/yabai";
-    wezterm = "/Applications/WezTerm.app/Contents/MacOS/wezterm";
+    alacritty = "${pkgs.alacritty}/bin/alacritty";
   in {
     enable = true;
 
@@ -43,7 +43,7 @@ in
       f13 : pmset displaysleepnow
 
 
-      ${hyper} - return : ${wezterm} start
+      ${hyper} - return : ${alacritty}
       ${hyper} - h : ${yabai} -m window --swap west  
       ${hyper} - j : ${yabai} -m window --swap south  
       ${hyper} - k : ${yabai} -m window --swap north 
@@ -60,6 +60,6 @@ in
     '';
   };
 
-  environment.systemPackages = [ pkgs.skhd ];
+  environment.systemPackages = [pkgs.skhd];
 
 }
