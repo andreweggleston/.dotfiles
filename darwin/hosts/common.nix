@@ -5,7 +5,6 @@ in
 {
   imports = [
     inputs.home-manager.darwinModules.home-manager
-    ../fonts.nix
   ];
 
   home-manager.extraSpecialArgs = { inherit inputs outputs; };
@@ -22,7 +21,6 @@ in
     pkgs.vim
     pkgs.fish
     pkgs.rustup
-    pkgs.alacritty
   ];
 
   security.pam.enableSudoTouchIdAuth = true;

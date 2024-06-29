@@ -17,6 +17,12 @@
         hostname = "cs.uml.edu";
         user = "aegglest";
       };
+
+      mercury = {
+        hostname = "mercury.cs.uml.edu";
+        user = "aegglest";
+      };
+
     };
   };
 }
