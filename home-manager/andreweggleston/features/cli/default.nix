@@ -1,5 +1,9 @@
-{ inputs, config, pkgs, ... }:
 {
+  inputs,
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ./fish.nix
     ./nushell
@@ -11,7 +15,8 @@
   ];
 
   home.packages = builtins.attrValues {
-    inherit (pkgs)
+    inherit
+      (pkgs)
       nixFlakes
       jq
       tealdeer
@@ -28,14 +33,15 @@
       gron
       xh
       just
+      vim
       ;
     neovim = inputs.nixvim.packages.${pkgs.system}.default;
-    };
+  };
 
   programs = {
     direnv.enable = true;
     direnv.nix-direnv.enable = true;
-  
+
     nix-index = {
       enable = true;
       enableFishIntegration = true;
@@ -53,5 +59,4 @@
     target = ".config/nixpkgs/config.nix";
     source = ./nixpkgs-config.nix;
   };
-  
 }
