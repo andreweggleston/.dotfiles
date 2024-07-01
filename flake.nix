@@ -13,10 +13,10 @@
     home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     
-    # darwin = {
-    #   url = "github:lnl7/nix-darwin";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    darwin = {
+      url = "github:lnl7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # nixos-wsl = {
     #   url = "github:nix-community/NixOS-WSL";
@@ -29,7 +29,7 @@
     nix-colors.url = "github:misterio77/nix-colors";
 
     nixvim = {
-      url = "github:nix-community/nixvim";
+      url = "github:andreweggleston/nixvim";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
@@ -45,8 +45,8 @@
       forAllSystems = nixpkgs.lib.genAttrs [
         "aarch64-linux"
         # "i686-linux"
-        # "x86_64-linux"
-        # "aarch64-darwin"
+        "x86_64-linux"
+        "aarch64-darwin"
         # "x86_64-darwin"
       ];
 
@@ -55,10 +55,10 @@
         specialArgs = { inherit inputs outputs; };
       };
 
-      # mkDarwin = system: modules: inputs.darwin.lib.darwinSystem {
-      #   inherit modules system inputs;
-      #   specialArgs = { inherit inputs outputs; };
-      # };
+      mkDarwin = system: modules: inputs.darwin.lib.darwinSystem {
+        inherit modules system inputs;
+        specialArgs = { inherit inputs outputs; };
+      };
 
       mkHome = modules: pkgs: home-manager.lib.homeManagerConfiguration {
         inherit modules pkgs;
@@ -93,16 +93,22 @@
       nixosConfigurations = {
         # rose gold m2 macbook air
         macbook-nixos = mkNixos [ ./nixos/hosts/macbook-nixos ];
+        # vm on kilpisjarvi
+        nix-devbox = mkNixos [ ./nixos/hosts/nix-devbox ];
       };
 
       darwinConfigurations = {
         # eg
         # {hostname} = mkDarwin "aarch64-darwin" [ ./darwin/hosts/{hostname}.nix ];
+        
+        # midnight blue m2 macbook air
+        andrews-macbook-darwin = mkDarwin "aarch64-darwin" [ ./darwin/hosts/macbook.nix ];
       };
 
       # Standalone home-manager configuration entrypoint
       # Available through 'home-manager --flake .#your-username@your-hostname'
       homeConfigurations = {
+
         # TODO: add generic standalone home-manager config
       };
     };

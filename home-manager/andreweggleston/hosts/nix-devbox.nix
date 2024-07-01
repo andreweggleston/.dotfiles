@@ -2,7 +2,6 @@
 {
   imports = [
     ../global
-    ../features/desktop/common/alacritty.nix
+    ../features/desktop/common
   ];
-
 }

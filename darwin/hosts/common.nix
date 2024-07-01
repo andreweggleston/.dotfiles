@@ -5,7 +5,6 @@ in
 {
   imports = [
     inputs.home-manager.darwinModules.home-manager
-    ../fonts.nix
   ];
 
   home-manager.extraSpecialArgs = { inherit inputs outputs; };

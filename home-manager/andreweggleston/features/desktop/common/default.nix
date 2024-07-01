@@ -14,13 +14,8 @@ let
       inherit (pkgs)
         dmenu
         chromium
-        zeal
-        tigervnc
-        obsidian
-        _1password-gui
         vlc
         mpv
-        bookworm
         ;
       };
 
