@@ -8,9 +8,6 @@
 
       # apple-silicon hardware support
       inputs.apple-silicon.nixosModules.apple-silicon-support
-
-      # speakersafetyd module from this repo
-      outputs.nixosModules.speakersafetyd
       
       ../../common.nix
 
@@ -32,9 +29,6 @@
 
       # loopback video (for virtual webcam)
       # outputs.nixosModules.v4l2-loopback
-
-      # iam scared of my speakers exploding
-      #./enable-speakers.nix
     ];
 
   home-manager.users.andreweggleston = import ../../../home-manager/andreweggleston/hosts/macbook-nixos.nix;
@@ -50,23 +44,20 @@
   #   ];
   # };
 
-
-  # services.speakersafetyd.enable = true;
-
   environment.systemPackages = [ 
     pkgs.networkmanagerapplet
   ];
 
 
   # asahi linux overlay
-  # nixpkgs.overlays = [ inputs.apple-silicon.overlays.apple-silicon-overlay ];
+  nixpkgs.overlays = [ inputs.apple-silicon.overlays.apple-silicon-overlay ];
 
   # enable GPU support
   hardware.asahi.useExperimentalGPUDriver = true;
   hardware.asahi.experimentalGPUInstallMode = "replace";
-  hardware.asahi.addEdgeKernelConfig = true;
-  hardware.asahi.withRust = true;
-  hardware.asahi.setupAlsaUcm = true;
+
+  # new sound option
+  hardware.asahi.setupAsahiSound = true;
 
   # backlight control
   programs.light.enable = true;  
