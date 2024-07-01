@@ -1,33 +1,39 @@
-{ config, pkgs, lib, ... }:
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   inherit (lib) mkIf;
   inherit (builtins) attrValues;
   inherit (lib.lists) optionals;
 
   inherit (pkgs.stdenv) isLinux isx86_64;
 
-  mkAsahiWrapper = (import ./asahi-wrapper.nix { inherit lib pkgs; });
-  kitty = mkAsahiWrapper { name = "kitty"; package = pkgs.kitty; };
+  mkAsahiWrapper = import ./asahi-wrapper.nix {inherit lib pkgs;};
+  kitty = mkAsahiWrapper {
+    name = "kitty";
+    package = pkgs.kitty;
+  };
 
-  common-packages = [ kitty pkgs.xfce.thunar ] 
+  common-packages =
+    [kitty pkgs.xfce.thunar]
     ++ attrValues {
-      inherit (pkgs)
+      inherit
+        (pkgs)
         dmenu
         chromium
         vlc
         mpv
         ;
-      };
-
-    x86-linux-packages = attrValues {
-      inherit (pkgs)
-        calibre
-        zoom-us
-        slack
-        logseq
-        simplescreenrecorder
-        ;
     };
+
+  x86-linux-packages = attrValues {
+    inherit
+      (pkgs)
+      simplescreenrecorder
+      ;
+  };
 in {
   imports = [
     ./fonts.nix
@@ -41,5 +47,4 @@ in {
     ++ optionals (isLinux && isx86_64) x86-linux-packages;
 
   wallpaper = lib.mkDefault ../backgrounds/jwst-carina.jpg;
-
 }
