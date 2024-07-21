@@ -30,7 +30,7 @@
 
     nixvim = {
       url = "github:andreweggleston/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     nur.url = "github:nix-community/nur";

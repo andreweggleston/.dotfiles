@@ -34,6 +34,7 @@
       xh
       just
       vim
+      nix-tree
       ;
     neovim = inputs.nixvim.packages.${pkgs.system}.default;
   };
