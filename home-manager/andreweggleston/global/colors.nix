@@ -1,20 +1,24 @@
-{ inputs, pkgs, lib, config, ...}:
 {
+  inputs,
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   imports = [
     inputs.nix-colors.homeManagerModule
-
   ];
 
-  colorScheme = lib.mkDefault inputs.nix-colors.colorSchemes.nord;
+  colorScheme = lib.mkDefault inputs.nix-colors.colorSchemes.woodland;
 
   # write the color scheme to a CSS file for future reference
-  home.file.".config/colors/colorscheme.css".text = let 
-    colors = config.colorScheme.colors;
+  home.file.".config/colors/colorscheme.css".text = let
+    colors = config.colorScheme.palette;
   in ''
     /*
-      color scheme: ${config.colorScheme.name} (${config.colorScheme.kind})
+      color scheme: ${config.colorScheme.name} (${config.colorScheme.variant})
     */
-    :root { 
+    :root {
       --color-base00: #${colors.base00};
       --color-base01: #${colors.base01};
       --color-base02: #${colors.base02};

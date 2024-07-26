@@ -1,5 +1,9 @@
-{ config, pkgs, ... }:
-let colors = config.colorScheme.colors;
+{
+  config,
+  pkgs,
+  ...
+}: let
+  colors = config.colorScheme.palette;
 in {
   services.mako = {
     enable = true;
