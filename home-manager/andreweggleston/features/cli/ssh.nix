@@ -1,5 +1,4 @@
-{ ... }:
-{
+{...}: {
   programs.ssh = {
     enable = true;
     extraConfig = ''
@@ -20,6 +19,10 @@
       mercury = {
         hostname = "mercury.cs.uml.edu";
         user = "aegglest";
+      };
+      kilpisjarvi = {
+        hostname = "kilpisjarvi.peckave.local";
+        user = "root";
       };
     };
   };
