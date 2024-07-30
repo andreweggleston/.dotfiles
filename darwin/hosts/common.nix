@@ -1,13 +1,17 @@
-{ pkgs, lib, inputs, outputs, ... }:
-let
-  inherit (inputs) nixpkgs;
-in
 {
+  pkgs,
+  lib,
+  inputs,
+  outputs,
+  ...
+}: let
+  inherit (inputs) nixpkgs;
+in {
   imports = [
     inputs.home-manager.darwinModules.home-manager
   ];
 
-  home-manager.extraSpecialArgs = { inherit inputs outputs; };
+  home-manager.extraSpecialArgs = {inherit inputs outputs;};
 
   users.users.andreweggleston = {
     name = "andreweggleston";
@@ -15,12 +19,17 @@ in
     shell = pkgs.fish;
   };
 
+  nixpkgs.overlays = [
+    outputs.overlays.unstable-packages
+  ];
+
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
-  environment.systemPackages = [ 
+  environment.systemPackages = [
     pkgs.vim
     pkgs.fish
     pkgs.rustup
+    pkgs.unstable.alacritty
   ];
 
   security.pam.enableSudoTouchIdAuth = true;
@@ -30,16 +39,18 @@ in
     set -gx PATH /run/current-system/sw/bin $HOME/.nix-profile/bin $PATH
   '';
 
-  environment.shells = builtins.attrValues { inherit (pkgs) bashInteractive zsh fish; };
+  environment.shells = builtins.attrValues {inherit (pkgs) bashInteractive zsh fish;};
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
   nix.package = pkgs.nix;
-  nix.extraOptions = ''
-    experimental-features = nix-command flakes repl-flake
-  ''+ lib.optionalString (pkgs.system == "aarch64-darwin") ''
-    extra-platforms = x86_64-darwin aarch64-darwin
-  '';
+  nix.extraOptions =
+    ''
+      experimental-features = nix-command flakes repl-flake
+    ''
+    + lib.optionalString (pkgs.system == "aarch64-darwin") ''
+      extra-platforms = x86_64-darwin aarch64-darwin
+    '';
 
   # pin nixpkgs in the system flake registry to the revision used
   # to build the config
@@ -47,13 +58,14 @@ in
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.overlays = [
-    (final: prev: lib.optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
-      # Add access to x86 packages system is running Apple Silicon
-      pkgs-x86 = import nixpkgs {
-        system = "x86_64-darwin";
-        config.allowUnfree = true;
-      };
-    }) 
+    (final: prev:
+      lib.optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
+        # Add access to x86 packages system is running Apple Silicon
+        pkgs-x86 = import nixpkgs {
+          system = "x86_64-darwin";
+          config.allowUnfree = true;
+        };
+      })
   ];
 
   #TODO: system.stateVersion = 4;
