@@ -1,31 +1,37 @@
-{ lib, pkgs, config, ... }:
-let
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}: let
   inherit (config.colorScheme) colors;
 in {
   programs.alacritty = {
     enable = true;
     settings = {
-      font.size = 14;
-      font.normal.family = "FiraCode Nerd Font Mono";
-      font.bold.family = "FiraCode Nerd Font Mono";
+      font = {
+        size = 14;
+        normal.family = "FiraCode Nerd Font Mono";
+        bold.family = "FiraCode Nerd Font Mono";
+      };
 
       colors = {
         primary = {
           foreground = "#${colors.base05}";
           background = "#${colors.base00}";
         };
-      
+
         # Colors the cursor will use if `custom_cursor_colors` is true
         cursor = {
           text = "#${colors.base00}";
           cursor = "#${colors.base05}";
         };
-    
+
         # Normal colors
         normal = {
           black = "#${colors.base00}";
           red = "#${colors.base08}";
-          green =   "#${colors.base0B}";
+          green = "#${colors.base0B}";
           yellow = "#${colors.base0A}";
           blue = "#${colors.base0D}";
           magenta = "#${colors.base0E}";
@@ -42,8 +48,8 @@ in {
           magenta = "#${colors.base06}";
           cyan = "#${colors.base0F}";
           white = "#${colors.base07}";
-       };
-       draw_bold_text_with_bright_colors = false;
+        };
+        draw_bold_text_with_bright_colors = false;
       };
     };
   };
