@@ -1,13 +1,23 @@
-{ inputs, outputs, lib, config, pkgs, ... }: 
-let
-  inherit (pkgs.stdenv) isDarwin;
-  homeDirectory = if isDarwin then "/Users/andreweggleston" else "/home/andreweggleston";
-in
 {
-  imports = [
-    ./colors.nix
-    ../features/cli
-  ] ++ (builtins.attrValues outputs.homeManagerModules);
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: let
+  inherit (pkgs.stdenv) isDarwin;
+  homeDirectory =
+    if isDarwin
+    then "/Users/andreweggleston"
+    else "/home/andreweggleston";
+in {
+  imports =
+    [
+      ./colors.nix
+      ../features/cli
+    ]
+    ++ (builtins.attrValues outputs.homeManagerModules);
 
   nixpkgs = {
     overlays = [
@@ -19,7 +29,7 @@ in
     config = {
       allowUnfree = true;
       # Workaround for https://github.com/nix-community/home-manager/issues/2942
-      allowUnfreePredicate = (_: true);
+      allowUnfreePredicate = _: true;
     };
   };
 
