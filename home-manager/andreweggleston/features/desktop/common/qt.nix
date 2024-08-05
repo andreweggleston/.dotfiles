@@ -4,8 +4,9 @@
     then "adwaita-dark"
     else "adwaita";
 in {
-  qt.enable = true;
-  qt.style.name = style;
-  qt.platformTheme = "gnome";
+  qt = {
+    enable = true;
+    style.name = style;
+    platformTheme.name = style;
+  };
 }
-
