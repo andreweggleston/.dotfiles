@@ -20,6 +20,9 @@ The `justfile` defines a few recipies using the [just](https://github.com/casey/
 If you don't have `just` installed but do have nix, run `nix develop` to open a bootstrap shell environment.
 
 ## TODOS
-* Router: Swap DHCP server from dnsmasq to Kea to support dhcp failover
-* Router: investigate ipv6 more--test-ipv6.com still fails
-* Router: add wireguard vpn server (will require nftables configuration)
+### Router:
+* Swap DHCP server from dnsmasq to Kea to support dhcp failover
+* investigate ipv6 more--test-ipv6.com still fails
+### lepotato:
+* set up remote builds (on nix-devbox)
+* add kea dhcp failover
