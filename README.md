@@ -18,3 +18,8 @@ Pretty much copied from [yusefnapora's config](https://github.com/yusefnapora/ni
 The `justfile` defines a few recipies using the [just](https://github.com/casey/just) command runner. Run `just --list` to list all recipies. The most important are `just switch`, which builds the config (for the current hostname by default) and switches to it, `just build` which builds but doesn't switch, and `just trace`, which prints the stacktrace when things fail to build.
 
 If you don't have `just` installed but do have nix, run `nix develop` to open a bootstrap shell environment.
+
+## TODOS
+* Router: Swap DHCP server from dnsmasq to Kea to support dhcp failover
+* Router: investigate ipv6 more--test-ipv6.com still fails
+* Router: add wireguard vpn server (will require nftables configuration)

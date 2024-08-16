@@ -53,10 +53,12 @@
       # "x86_64-darwin"
     ];
 
+    secrets = builtins.fromJSON (builtins.readFile "${self}/secrets.json");
+
     mkNixos = modules:
       nixpkgs.lib.nixosSystem {
         inherit modules;
-        specialArgs = {inherit inputs outputs;};
+        specialArgs = {inherit inputs outputs secrets;};
       };
 
     mkDarwin = system: modules:
@@ -96,6 +98,8 @@
       macbook-nixos = mkNixos [./nixos/hosts/macbook-nixos];
       # vm on kilpisjarvi
       nix-devbox = mkNixos [./nixos/hosts/nix-devbox];
+      # home router -- qotom j6412
+      router = mkNixos [./nixos/hosts/router];
     };
 
     darwinConfigurations = {
