@@ -10,12 +10,10 @@
       checkRuleset = false;
       ruleset = ''
         flush ruleset
-        define LAN_SPACE = ${addresses.lan.ipv4.subnet}
-        define LAN6_SPACE = ${addresses.lan.ipv6.subnet}
 
         table netdev filter {
           chain ingress {
-            type filter hook ingress devices = { ${interfaces.wan.name}, ${interfaces.lan.name} } priority -500;
+            type filter hook ingress devices = { ${interfaces.wan.name}, ${interfaces.lan.name}, ${interfaces.vpn.name} } priority -500;
 
             # block weird packets
             tcp flags & (fin|syn) == (fin|syn) drop
@@ -24,7 +22,7 @@
             tcp flags & (fin|syn|rst|psh|ack|urg) == 0 drop
             tcp flags syn tcp option maxseg size 0-500 drop
 
-            # drop incoming packets on WAN that are pretending to be the internal address of the router (the lan interface)
+            # drop incoming packets that are pretending to be the internal address of the router (the lan interface)
             ip saddr ${addresses.lan.ipv4.addr} drop
             ip6 saddr ${addresses.lan.ipv6.addr} drop
 
@@ -43,6 +41,9 @@
             ip6 nexthdr icmpv6 limit rate 5/second accept
             ip6 nexthdr icmpv6 counter drop
 
+            # accept incoming vpn connections
+            udp dport ${builtins.toString addresses.vpn.port} accept
+
             # drop incoming packets that are not locally addressed
             fib daddr . iif type != local drop
           }
@@ -53,9 +54,14 @@
             # accept all icmp requests -- TODO this could be constrained or even rate-limited
             ip protocol icmp accept
             ip6 nexthdr icmpv6 accept
+            udp dport ${builtins.toString addresses.vpn.port} accept
           }
           chain inbound_lan {
             # accept all LAN traffic--yolo!
+            accept
+          }
+          chain inbound_vpn {
+            # accept all vpn traffic--yolo!
             accept
           }
           chain inbound {
@@ -69,7 +75,7 @@
 
             ct state vmap { established : accept, related : accept, invalid: drop }
 
-            iifname vmap { lo : accept, ${interfaces.wan.name} : jump inbound_wan, ${interfaces.lan.name} : jump inbound_lan }
+            iifname vmap { lo : accept, ${interfaces.wan.name} : jump inbound_wan, ${interfaces.lan.name} : jump inbound_lan, ${interfaces.vpn.name} : jump inbound_vpn }
           }
           chain forward {
             type filter hook forward priority 0; policy drop;
@@ -82,7 +88,11 @@
 
             ct state vmap { established : accept, related : accept, invalid : drop }
 
+            # always forward lan traffic anywhere
             iifname ${interfaces.lan.name} accept
+
+            # only allow vpn to be forwarded to lan and lo-- i dont use my home vpn as anything but a bridge to home network
+            iifname ${interfaces.vpn.name} oifname { ${interfaces.lan.name}, lo } accept
           }
           chain postrouting {
             type nat hook postrouting priority 100; policy accept;

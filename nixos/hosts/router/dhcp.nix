@@ -8,7 +8,6 @@
       enable = true;
       settings = {
         except-interface = interfaces.wan.name;
-        interface = interfaces.lan.name;
         domain = "peckave.local";
         local = "/peckave.local/";
         expand-hosts = true;
