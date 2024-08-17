@@ -21,8 +21,13 @@ If you don't have `just` installed but do have nix, run `nix develop` to open a 
 
 ## TODOS
 ### Router:
-* Swap DHCP server from dnsmasq to Kea to support dhcp failover
+* Swap DHCP server from dnsmasq to Kea to support dhcp failover -- can also maybe switch DNS provider to unbound... probably not necessary
+* fix dns over vpn
+* fix http over vpn??
 * investigate ipv6 more--test-ipv6.com still fails
+* Set up different vlans for regular clients and services -- keep mastodon traffic from clients
+* ~~Router: add wireguard vpn server (will require nftables configuration)
+
 ### lepotato:
 * set up remote builds (on nix-devbox)
 * add kea dhcp failover
