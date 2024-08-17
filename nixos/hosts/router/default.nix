@@ -1,6 +1,5 @@
 {
   pkgs,
-  config,
   secrets,
   ...
 }: let
@@ -9,10 +8,15 @@
   vpn4 = "10.177.23.";
   vpn6 = "fddb:05a0:ea9a::";
   vpnPort = 30441;
-  makeDhcpStaticClient = _name: _address: {
-    name = _name;
-    addr4 = lan4 + _address;
-    addr6 = lan6 + _address;
+  makeDhcpReservation = {
+    name,
+    hw_addr,
+    addr,
+  }: {
+    inherit name;
+    inherit hw_addr;
+    addr4 = "${lan4}${addr}";
+    addr6 = "${lan6}${addr}";
   };
   addresses = {
     vpn = {
@@ -32,28 +36,21 @@
       ipv4 = {
         addr = "${lan4}1";
         subnet = "${lan4}0/24";
-        dhcpRange = "${lan4}50,${lan4}254,12h";
+        dhcpRange = {
+          low = "${lan4}50";
+          high = "${lan4}254";
+        };
       };
       ipv6 = {
         addr = "${lan6}1";
         subnet = "${lan6}/64";
-        dhcpRange = "${lan6}1000,${lan6}ff00,ra-names,slaac,12h";
+        dhcpRange = {
+          low = "${lan6}1000";
+          high = "${lan6}ff00";
+        };
       };
     };
-    clients = [
-      (makeDhcpStaticClient
-        "officerouter"
-        "2")
-      (makeDhcpStaticClient
-        "rax80"
-        "3")
-      (makeDhcpStaticClient
-        "kilpisjarvi"
-        "4")
-      (makeDhcpStaticClient
-        "lepotato"
-        "49")
-    ];
+    clients = map makeDhcpReservation secrets.router.dhcp_reservations;
   };
   interfaces = {
     lan = {
@@ -80,12 +77,14 @@ in {
       inherit addresses;
       inherit interfaces;
     })
+    (import ./dns.nix {
+      inherit interfaces;
+    })
     (import ./routing.nix {
       inherit addresses;
       inherit interfaces;
     })
     (import ./wireguard.nix {
-      inherit config;
       inherit addresses;
       inherit interfaces;
     })
