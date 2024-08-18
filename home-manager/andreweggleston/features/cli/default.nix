@@ -35,6 +35,9 @@
       just
       vim
       nix-tree
+      git-crypt
+      wireguard-tools
+      dig
       ;
     neovim = inputs.nixvim.packages.${pkgs.system}.default;
   };

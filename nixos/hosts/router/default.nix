@@ -94,9 +94,6 @@ in {
   home-manager.users.andreweggleston = import ../../../home-manager/andreweggleston/hosts/router.nix;
 
   environment.systemPackages = [
-    pkgs.dig
-    pkgs.git-crypt
-    pkgs.wireguard-tools
   ];
 
   networking = {
