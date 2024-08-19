@@ -30,6 +30,7 @@ If you don't have `just` installed but do have nix, run `nix develop` to open a 
 * investigate ipv6 more--test-ipv6.com still fails
 * Set up different vlans for regular clients and services -- keep mastodon traffic from clients
     * home switch supports 802.1q vlans, as does proxmox host
+* 803.1ad/802.1ax Link Aggregation -- I can "trunk" up to 4 ports on my switch -- should make a "router-bonding" branch 
 * ~~Router: add wireguard vpn server (will require nftables configuration)~~
 
 ### lepotato:
