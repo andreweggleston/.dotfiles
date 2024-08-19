@@ -21,14 +21,17 @@ If you don't have `just` installed but do have nix, run `nix develop` to open a 
 
 ## TODOS
 ### Router:
-* Swap DHCP server from dnsmasq to Kea to support dhcp failover -- can also maybe switch DNS provider to unbound... probably not necessary
+* ~~Swap DHCP server from dnsmasq to Kea~~
+    * to support dhcp HA
+    * local DNS is broken because dnsmasq doesn't know about dhcp leases anymore--Will require configuring kea-ddns-server 
+* RE: above; should also switch from dnsmasq to a combination of BIND and unbound (can also do HA on lepotato)
 * switch proxmox host to dhcp
-* fix dns over vpn
 * fix http over vpn?? -- only doesnt work for RAX80 access point...
 * investigate ipv6 more--test-ipv6.com still fails
 * Set up different vlans for regular clients and services -- keep mastodon traffic from clients
-* ~~Router: add wireguard vpn server (will require nftables configuration)
+    * home switch supports 802.1q vlans, as does proxmox host
+* ~~Router: add wireguard vpn server (will require nftables configuration)~~
 
 ### lepotato:
 * set up remote builds (on nix-devbox)
-* add kea dhcp failover
+* add kea dhcp server for HA
