@@ -1,35 +1,40 @@
-# Host config for 14" M1-Pro macbook pro 
-
-{ config, pkgs, lib, inputs, outputs, ... }:
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+  config,
+  pkgs,
+  lib,
+  inputs,
+  outputs,
+  secrets,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
 
-      # apple-silicon hardware support
-      inputs.apple-silicon.nixosModules.apple-silicon-support
-      
-      ../../common.nix
+    # apple-silicon hardware support
+    inputs.apple-silicon.nixosModules.apple-silicon-support
 
-      # enable various features
-      ../../features/sound.nix
-      ../../features/bluetooth.nix
-      ../../features/sway.nix
+    ../../common.nix
 
-      # font config
-      ../../features/hidpi.nix
+    # enable various features
+    ../../features/sound.nix
+    ../../features/bluetooth.nix
+    ../../features/sway.nix
 
-      # printing
-      ../../features/printing.nix
+    # font config
+    ../../features/hidpi.nix
 
-      # key mappings
-      # outputs.nixosModules.dual-function-keys
-      # ../../features/key-mapping/caps-to-ctrl-esc.nix
-      # ../../features/key-mapping/right-alt-to-ctrl-b.nix
+    # printing
+    ../../features/printing.nix
 
-      # loopback video (for virtual webcam)
-      # outputs.nixosModules.v4l2-loopback
-    ];
+    # key mappings
+    # outputs.nixosModules.dual-function-keys
+    # ../../features/key-mapping/caps-to-ctrl-esc.nix
+    # ../../features/key-mapping/right-alt-to-ctrl-b.nix
+
+    # loopback video (for virtual webcam)
+    # outputs.nixosModules.v4l2-loopback
+  ];
 
   home-manager.users.andreweggleston = import ../../../home-manager/andreweggleston/hosts/macbook-nixos.nix;
 
@@ -44,13 +49,12 @@
   #   ];
   # };
 
-  environment.systemPackages = [ 
+  environment.systemPackages = [
     pkgs.networkmanagerapplet
   ];
 
-
   # asahi linux overlay
-  nixpkgs.overlays = [ inputs.apple-silicon.overlays.apple-silicon-overlay ];
+  nixpkgs.overlays = [inputs.apple-silicon.overlays.apple-silicon-overlay];
 
   # enable GPU support
   hardware.asahi.useExperimentalGPUDriver = true;
@@ -60,12 +64,20 @@
   hardware.asahi.setupAsahiSound = true;
 
   # backlight control
-  programs.light.enable = true;  
+  programs.light.enable = true;
   services.actkbd = {
     enable = true;
     bindings = [
-      { keys = [ 225 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -A 10"; }
-      { keys = [ 224 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -U 10"; }
+      {
+        keys = [225];
+        events = ["key"];
+        command = "/run/current-system/sw/bin/light -A 10";
+      }
+      {
+        keys = [224];
+        events = ["key"];
+        command = "/run/current-system/sw/bin/light -U 10";
+      }
     ];
   };
 
@@ -77,7 +89,6 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
-
 
   networking = {
     hostName = "macbook-nixos";
@@ -91,13 +102,36 @@
       enable = true;
       wifi.backend = "iwd";
       plugins = [
-        pkgs.networkmanager-openconnect
-        pkgs.networkmanager-openvpn
       ];
+    };
+    wireguard = {
+      interfaces = {
+        wg0 = let
+          vpnNet = secrets.hosts.router.networks.vpn;
+          lanNet = secrets.hosts.router.networks.lan;
+        in {
+          ips = ["${vpnNet.base4}${secrets.vpn.reservations.macbook-nixos.address}/${vpnNet.prefix-length4}" "${vpnNet.base6}${secrets.vpn.reservations.macbook-nixos.address}/${vpnNet.prefix-length6}"];
+          listenPort = vpnNet.port;
+          privateKeyFile = "/home/andreweggleston/.wireguard-keys/private";
+
+          peers = [
+            {
+              publicKey = vpnNet.public-key;
+              allowedIPs = [
+                "${vpnNet.base4}0/${vpnNet.prefix-length4}" # vpn network
+                "${vpnNet.base6}0/${vpnNet.prefix-length6}" # vpn network
+                "${lanNet.base4}0/${lanNet.prefix-length4}" # home network
+                "${lanNet.base6}0/${lanNet.prefix-length6}" # home network
+              ];
+              endpoint = "never.legalizenuclearbombs.com:${builtins.toString vpnNet.port}";
+              persistentKeepalive = 25;
+            }
+          ];
+        };
+      };
     };
   };
   programs.nm-applet.enable = true;
 
   system.stateVersion = "23.11";
 }
-

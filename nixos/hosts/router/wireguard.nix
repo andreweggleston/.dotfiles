@@ -1,6 +1,8 @@
 {
   addresses,
   interfaces,
+  secrets,
+  lib,
   ...
 }: {
   networking.wireguard.interfaces = {
@@ -9,13 +11,13 @@
       listenPort = addresses.vpn.port;
       privateKeyFile = "/home/andreweggleston/.wireguard-keys/private";
 
-      peers = [
-        {
-          name = "m2-darwin";
-          publicKey = "In2G6D2xo6yU+0j5Q8rSKGGQaeu6CIKPRbg+4qhvjw0=";
-          allowedIPs = ["${addresses.vpn.ipv4.base}2/32" "${addresses.vpn.ipv6.base}2/128"];
-        }
-      ];
+      peers =
+        lib.attrsets.mapAttrsToList (name: value: {
+          inherit name;
+          publicKey = value.public-key;
+          allowedIPs = ["${addresses.vpn.ipv4.base}${value.address}/32" "${addresses.vpn.ipv6.base}${value.address}/128"];
+        })
+        secrets.vpn.reservations;
     };
   };
 }

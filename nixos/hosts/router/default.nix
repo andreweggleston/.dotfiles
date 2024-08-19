@@ -1,23 +1,14 @@
 {
-  pkgs,
+  lib,
   secrets,
   ...
 }: let
-  lan4 = "192.168.3.";
-  lan6 = "fdd5:beef:c0de::";
-  vpn4 = "10.177.23.";
-  vpn6 = "fddb:05a0:ea9a::";
-  vpnPort = 30441;
-  makeDhcpReservation = {
-    name,
-    hw_addr,
-    addr,
-  }: {
-    inherit name;
-    inherit hw_addr;
-    addr4 = "${lan4}${addr}";
-    addr6 = "${lan6}${addr}";
-  };
+  inherit (lib.attrsets) mapAttrsToList;
+  lan4 = secrets.hosts.router.networks.lan.base4;
+  lan6 = secrets.hosts.router.networks.lan.base6;
+  vpn4 = secrets.hosts.router.networks.vpn.base4;
+  vpn6 = secrets.hosts.router.networks.vpn.base6;
+  vpnPort = secrets.hosts.router.networks.vpn.port;
   addresses = {
     vpn = {
       ipv4 = {
@@ -50,16 +41,34 @@
         };
       };
     };
-    clients = map makeDhcpReservation secrets.router.dhcp_reservations;
+    clients =
+      map ({
+        name,
+        hw_addr,
+        addr,
+      }: {
+        inherit name;
+        inherit hw_addr;
+        addr4 = "${lan4}${addr}";
+        addr6 = "${lan6}${addr}";
+      })
+      secrets.hosts.router.dhcp_reservations;
+    vpn-clients =
+      mapAttrsToList (name: value: {
+        inherit name;
+        publicKey = value.public-key;
+        allowedIPs = ["${addresses.vpn.ipv4.base}${value.address}/32" "${addresses.vpn.ipv6.base}${value.address}/128"];
+      })
+      secrets.vpn.reservations;
   };
   interfaces = {
     lan = {
       name = "lan0";
-      mac = secrets.router.lan_mac;
+      mac = secrets.hosts.router.lan_mac;
     };
     wan = {
       name = "wan0";
-      mac = secrets.router.wan_mac;
+      mac = secrets.hosts.router.wan_mac;
     };
     vpn = {
       name = "wg0";
@@ -87,6 +96,8 @@ in {
     (import ./wireguard.nix {
       inherit addresses;
       inherit interfaces;
+      inherit lib;
+      inherit secrets;
     })
     ../../minimal.nix
   ];
