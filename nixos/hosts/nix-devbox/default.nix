@@ -32,7 +32,6 @@
 
   networking = {
     hostName = "nix-devbox";
-    nameservers = ["192.168.2.2"];
   };
 
   services.openssh.settings.X11Forwarding = true;
