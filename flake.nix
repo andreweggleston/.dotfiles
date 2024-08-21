@@ -108,6 +108,8 @@
       nix-devbox = mkNixos [./nixos/hosts/nix-devbox];
       # home router -- qotom j6412
       router = mkNixos [./nixos/hosts/router];
+      # aarch64 vm on kilpisjarvi
+      nixos-arm = mkNixos [./nixos/hosts/nixos-arm];
     };
 
     darwinConfigurations = {
