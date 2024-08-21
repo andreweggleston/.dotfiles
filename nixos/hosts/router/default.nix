@@ -110,6 +110,7 @@ in {
   networking = {
     hostName = "router";
     hosts = {
+      "127.0.0.2" = lib.mkForce [];
       ${addresses.lan.ipv4.addr} = ["router" "router.peckave.local"]; # for some reason /etc/hosts has an entry "127.0.0.2 router" and no that 2 is not a typo
     };
   };
