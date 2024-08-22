@@ -1,14 +1,16 @@
 {
   addresses,
   interfaces,
+  lib,
   ...
-}: {
+}: let
+  mkUdevInterfaceNameRule = {
+    name,
+    mac,
+  }: ''SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="${mac}", NAME="${name}"'';
+in {
   # name interfaces
-  services.udev.extraRules = ''
-    SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="${interfaces.lan.mac}", NAME="${interfaces.lan.name}"
-    SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="${interfaces.wan.mac}", NAME="${interfaces.wan.name}"
-
-  '';
+  services.udev.extraRules = lib.concatStringsSep "\n" (map mkUdevInterfaceNameRule interfaces.renames);
   networking = {
     interfaces = {
       # get address from isp

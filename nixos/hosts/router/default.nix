@@ -62,13 +62,15 @@
       secrets.vpn.reservations;
   };
   interfaces = {
+    renames = secrets.hosts.router.interfaces;
     lan = {
       name = "lan0";
-      mac = secrets.hosts.router.lan_mac;
+    };
+    bond = {
+      name = "bond0";
     };
     wan = {
       name = "wan0";
-      mac = secrets.hosts.router.wan_mac;
     };
     vpn = {
       name = "wg0";
@@ -81,6 +83,7 @@ in {
     (import ./interfaces.nix {
       inherit addresses;
       inherit interfaces;
+      inherit lib;
     })
     (import ./dhcp.nix {
       inherit addresses;
