@@ -23,8 +23,19 @@
               data = addresses.lan.ipv4.addr;
             }
           ];
+          dhcp-ddns = {
+            enable-updates = true;
+            server-ip = "127.0.0.1";
+            server-port = 53001;
+          };
+          ddns-send-updates = true;
           subnet4 = [
             {
+              ddns-qualifying-suffix = "peckave.home.arpa";
+              ddns-send-updates = true;
+              ddns-override-client-update = true;
+              ddns-override-no-update = true;
+              ddns-update-on-renew = true;
               subnet = addresses.lan.ipv4.subnet;
               pools = [
                 {
@@ -71,8 +82,19 @@
               data = addresses.lan.ipv6.addr;
             }
           ];
+          dhcp-ddns = {
+            enable-updates = true;
+            server-ip = "127.0.0.1";
+            server-port = 53001;
+          };
+          ddns-send-updates = true;
           subnet6 = [
             {
+              ddns-qualifying-suffix = "peckave.home.arpa";
+              ddns-send-updates = true;
+              ddns-override-client-update = true;
+              ddns-override-no-update = true;
+              ddns-update-on-renew = true;
               subnet = addresses.lan.ipv6.subnet;
               pools = [
                 {
