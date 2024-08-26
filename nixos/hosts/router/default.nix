@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   secrets,
   ...
 }: let
@@ -13,8 +14,8 @@
     vpn = {
       ipv4 = {
         base = vpn4;
-        addr = "${vpn4}1";
-        subnet = "${vpn4}0/24";
+        addr = "${vpn4}.1";
+        subnet = "${vpn4}.0/24";
       };
       ipv6 = {
         base = vpn6;
@@ -25,11 +26,11 @@
     };
     lan = {
       ipv4 = {
-        addr = "${lan4}1";
-        subnet = "${lan4}0/24";
+        addr = "${lan4}.1";
+        subnet = "${lan4}.0/24";
         dhcpRange = {
-          low = "${lan4}50";
-          high = "${lan4}254";
+          low = "${lan4}.50";
+          high = "${lan4}.254";
         };
       };
       ipv6 = {
@@ -49,7 +50,7 @@
       }: {
         inherit name;
         inherit hw_addr;
-        addr4 = "${lan4}${addr}";
+        addr4 = "${lan4}.${addr}";
         addr6 = "${lan6}${addr}";
       })
       secrets.hosts.router.dhcp_reservations;
@@ -57,7 +58,7 @@
       mapAttrsToList (name: value: {
         inherit name;
         publicKey = value.public-key;
-        allowedIPs = ["${addresses.vpn.ipv4.base}${value.address}/32" "${addresses.vpn.ipv6.base}${value.address}/128"];
+        allowedIPs = ["${addresses.vpn.ipv4.base}.${value.address}/32" "${addresses.vpn.ipv6.base}${value.address}/128"];
       })
       secrets.vpn.reservations;
   };
@@ -85,12 +86,12 @@ in {
       inherit interfaces;
       inherit lib;
     })
-    (import ./dhcp.nix {
+    (import ./dhcp-dns {
       inherit addresses;
       inherit interfaces;
-    })
-    (import ./dns.nix {
-      inherit interfaces;
+      inherit lib;
+      inherit pkgs;
+      inherit secrets;
     })
     (import ./routing.nix {
       inherit addresses;
@@ -108,6 +109,7 @@ in {
   home-manager.users.andreweggleston = import ../../../home-manager/andreweggleston/hosts/router.nix;
 
   environment.systemPackages = [
+    pkgs.dig.out # for tsig-keygen
   ];
 
   networking = {

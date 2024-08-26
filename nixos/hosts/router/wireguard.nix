@@ -15,7 +15,7 @@
         lib.attrsets.mapAttrsToList (name: value: {
           inherit name;
           publicKey = value.public-key;
-          allowedIPs = ["${addresses.vpn.ipv4.base}${value.address}/32" "${addresses.vpn.ipv6.base}${value.address}/128"];
+          allowedIPs = ["${addresses.vpn.ipv4.base}.${value.address}/32" "${addresses.vpn.ipv6.base}${value.address}/128"];
         })
         secrets.vpn.reservations;
     };
