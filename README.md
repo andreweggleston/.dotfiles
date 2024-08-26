@@ -23,8 +23,8 @@ If you don't have `just` installed but do have nix, run `nix develop` to open a 
 ### Router:
 * ~~Swap DHCP server from dnsmasq to Kea~~
     * to support dhcp HA
-    * local DNS is broken because dnsmasq doesn't know about dhcp leases anymore--Will require configuring kea-ddns-server 
-* RE: above; should also switch from dnsmasq to a combination of BIND and unbound (can also do HA on lepotato)
+    * ~~local DNS is broken because dnsmasq doesn't know about dhcp leases anymore--Will require configuring kea-ddns-server~~
+* ~~RE: above; should also switch from dnsmasq to a combination of BIND and unbound~~ (can also do HA on lepotato)
 * switch proxmox host to dhcp
 * fix http over vpn?? -- only doesnt work for RAX80 access point...
 * investigate ipv6 more--test-ipv6.com still fails
