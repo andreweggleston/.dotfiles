@@ -47,6 +47,10 @@
                   name = "routers";
                   data = addresses.lan.ipv4.addr;
                 }
+                {
+                  name = "domain-search";
+                  data = "peckave.home.arpa";
+                }
               ];
               reservations =
                 map ({
@@ -99,6 +103,12 @@
               pools = [
                 {
                   pool = "${addresses.lan.ipv6.dhcpRange.low} - ${addresses.lan.ipv6.dhcpRange.high}";
+                }
+              ];
+              option-data = [
+                {
+                  name = "domain-search";
+                  data = "peckave.home.arpa";
                 }
               ];
               reservations =
