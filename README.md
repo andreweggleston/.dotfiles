@@ -21,18 +21,22 @@ If you don't have `just` installed but do have nix, run `nix develop` to open a 
 
 ## TODOS
 ### Router:
-* ~~Swap DHCP server from dnsmasq to Kea~~
-    * to support dhcp HA
-    * ~~local DNS is broken because dnsmasq doesn't know about dhcp leases anymore--Will require configuring kea-ddns-server~~
-* ~~RE: above; should also switch from dnsmasq to a combination of BIND and unbound~~ (can also do HA on lepotato)
+* Urgent: on reboot, nftables fails to come up because it depends on the wireguard interface existing. 2 options for solutions:
+    * Have the nftables systemd unit depend on wireguard--untested and how will wireguard behave?
+    * Have the wireguard systemd unit automatically add/remove nftables rules on start/stop (this is how wireguard usually works with iptables)
+* DHCP/DNS High-Availability 
 * switch proxmox host to dhcp
 * fix http over vpn?? -- only doesnt work for RAX80 access point...
 * investigate ipv6 more--test-ipv6.com still fails
 * Set up different vlans for regular clients and services -- keep mastodon traffic from clients
     * home switch supports 802.1q vlans, as does proxmox host
 * 803.1ad/802.1ax Link Aggregation -- I can "trunk" up to 4 ports on my switch -- should make a "router-bonding" branch 
-* ~~Router: add wireguard vpn server (will require nftables configuration)~~
+* ~~Add wireguard vpn server (will require nftables configuration)~~
+* ~~Switch from dnsmasq to BIND~~
+* ~~Swap DHCP server from dnsmasq to Kea~~
+    * ~~local DNS is broken because dnsmasq doesn't know about dhcp leases anymore--Will require configuring kea-ddns-server~~
+
 
 ### lepotato:
 * set up remote builds (on nix-devbox)
-* add kea dhcp server for HA
+* DHCP/DNS High-Availability 
