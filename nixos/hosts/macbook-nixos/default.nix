@@ -104,23 +104,24 @@
       plugins = [
       ];
     };
-    wireguard = {
+    wg-quick = {
       interfaces = {
         wg0 = let
           vpnNet = secrets.hosts.router.networks.vpn;
           lanNet = secrets.hosts.router.networks.lan;
         in {
-          ips = ["${vpnNet.base4}${secrets.vpn.reservations.macbook-nixos.address}/${vpnNet.prefix-length4}" "${vpnNet.base6}${secrets.vpn.reservations.macbook-nixos.address}/${vpnNet.prefix-length6}"];
+          address = ["${vpnNet.base4}.${secrets.vpn.reservations.macbook-nixos.address}/${vpnNet.prefix-length4}" "${vpnNet.base6}${secrets.vpn.reservations.macbook-nixos.address}/${vpnNet.prefix-length6}"];
           listenPort = vpnNet.port;
           privateKeyFile = "/home/andreweggleston/.wireguard-keys/private";
+          dns = ["${secrets.hosts.router.networks.lan.base4}.1" "${secrets.hosts.router.networks.lan.base6}1"];
 
           peers = [
             {
               publicKey = vpnNet.public-key;
               allowedIPs = [
-                "${vpnNet.base4}0/${vpnNet.prefix-length4}" # vpn network
+                "${vpnNet.base4}.0/${vpnNet.prefix-length4}" # vpn network
                 "${vpnNet.base6}0/${vpnNet.prefix-length6}" # vpn network
-                "${lanNet.base4}0/${lanNet.prefix-length4}" # home network
+                "${lanNet.base4}.0/${lanNet.prefix-length4}" # home network
                 "${lanNet.base6}0/${lanNet.prefix-length6}" # home network
               ];
               endpoint = "never.legalizenuclearbombs.com:${builtins.toString vpnNet.port}";
