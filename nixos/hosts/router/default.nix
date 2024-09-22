@@ -101,6 +101,7 @@ in {
       inherit addresses;
       inherit interfaces;
       inherit lib;
+      inherit pkgs;
       inherit secrets;
     })
     ../../minimal.nix
