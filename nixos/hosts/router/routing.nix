@@ -13,7 +13,7 @@
 
         table netdev filter {
           chain ingress {
-            type filter hook ingress devices = { ${interfaces.wan.name}, ${interfaces.lan.name}, ${interfaces.vpn.name} } priority -500;
+            type filter hook ingress devices = { ${interfaces.wan.name}, ${interfaces.lan.name} } priority -500;
 
             # block weird packets
             tcp flags & (fin|syn) == (fin|syn) drop
@@ -41,9 +41,6 @@
             ip6 nexthdr icmpv6 limit rate 5/second accept
             ip6 nexthdr icmpv6 counter drop
 
-            # accept incoming vpn connections
-            udp dport ${builtins.toString addresses.vpn.port} accept
-
             # drop incoming packets that are not locally addressed
             fib daddr . iif type != local drop
           }
@@ -54,14 +51,9 @@
             # accept all icmp requests -- TODO this could be constrained or even rate-limited
             ip protocol icmp accept
             ip6 nexthdr icmpv6 accept
-            udp dport ${builtins.toString addresses.vpn.port} accept
           }
           chain inbound_lan {
             # accept all LAN traffic--yolo!
-            accept
-          }
-          chain inbound_vpn {
-            # accept all vpn traffic--yolo!
             accept
           }
           chain inbound {
@@ -75,7 +67,7 @@
 
             ct state vmap { established : accept, related : accept, invalid: drop }
 
-            iifname vmap { lo : accept, ${interfaces.wan.name} : jump inbound_wan, ${interfaces.lan.name} : jump inbound_lan, ${interfaces.vpn.name} : jump inbound_vpn }
+            iifname vmap { lo : accept, ${interfaces.wan.name} : jump inbound_wan, ${interfaces.lan.name} : jump inbound_lan }
           }
           chain forward {
             type filter hook forward priority 0; policy drop;
@@ -90,9 +82,6 @@
 
             # always forward lan traffic anywhere
             iifname ${interfaces.lan.name} accept
-
-            # only allow vpn to be forwarded to lan and lo-- i dont use my home vpn as anything but a bridge to home network
-            iifname ${interfaces.vpn.name} oifname { ${interfaces.lan.name}, lo } accept
           }
           chain postrouting {
             type nat hook postrouting priority 100; policy accept;
