@@ -110,6 +110,8 @@
       router = mkNixos [./nixos/hosts/router];
       # aarch64 vm on kilpisjarvi
       nixos-arm = mkNixos [./nixos/hosts/nixos-arm];
+      # home pc -- ryzen 7900x + RTX 4070ts
+      drew-pc = mkNixos [./nixos/hosts/drew-pc];
     };
 
     darwinConfigurations = {
