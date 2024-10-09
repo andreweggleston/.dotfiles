@@ -21,6 +21,7 @@
       jq
       tealdeer
       unzip
+      btop
       htop
       killall
       tree
