@@ -1,8 +1,11 @@
-{ pkgs, lib, inputs, ... }:
-let
-  inherit (inputs) nixpkgs;
-in
 {
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: let
+  inherit (inputs) nixpkgs;
+in {
   imports = [
     ./common.nix
     # ../features/yabai.nix
@@ -11,5 +14,5 @@ in
 
   home-manager.users.andreweggleston = import ../../home-manager/andreweggleston/hosts/macbook-darwin.nix;
 
-  # TODO: system.stateVersion = 4;
+  system.stateVersion = 4;
 }

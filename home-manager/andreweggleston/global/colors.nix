@@ -9,7 +9,7 @@
     inputs.nix-colors.homeManagerModule
   ];
 
-  colorScheme = lib.mkDefault inputs.nix-colors.colorSchemes.woodland;
+  colorScheme = lib.mkDefault inputs.nix-colors.colorSchemes.espresso;
 
   # write the color scheme to a CSS file for future reference
   home.file.".config/colors/colorscheme.css".text = let
