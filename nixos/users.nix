@@ -5,7 +5,7 @@
 }: {
   users.users.andreweggleston = {
     isNormalUser = true;
-    extraGroups = ["wheel" "docker" "onepassword" "video" "libvirtd"];
+    extraGroups = ["wheel" "docker" "onepassword" "video" "libvirtd" "audio"];
     shell = pkgs.fish;
 
     openssh.authorizedKeys.keys = [
