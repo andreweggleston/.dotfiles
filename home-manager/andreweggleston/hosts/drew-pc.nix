@@ -10,6 +10,6 @@
     ../global
     ../features/desktop/common
     ../features/desktop/common/discord.nix
-    ../features/desktop/bitwig.nix
+    ../features/desktop/music-production.nix
   ];
 }
