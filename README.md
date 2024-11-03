@@ -20,6 +20,9 @@ The `justfile` defines a few recipies using the [just](https://github.com/casey/
 If you don't have `just` installed but do have nix, run `nix develop` to open a bootstrap shell environment.
 
 ## TODOS
+### drew-pc/macbook-nixos:
+* Remove albert as a dependency--it takes a long time to compile when version changes on the arm macbook, and there are simpler alternatives available (rofi/wofi)
+
 ### Router:
 * DHCP/DNS High-Availability 
 * remote builds:
