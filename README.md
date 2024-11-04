@@ -29,14 +29,13 @@ If you don't have `just` installed but do have nix, run `nix develop` to open a 
 * Set up different vlans for regular clients and services -- keep mastodon traffic from clients
     * home switch supports 802.1q vlans, as does proxmox host
 * 803.1ad/802.1ax Link Aggregation -- I can "trunk" up to 4 ports on my switch -- should make a "router-bonding" branch 
-* ~~Urgent: on reboot, nftables fails to come up because it depends on the wireguard interface existing. 2 options for solutions:
-    * Have the nftables systemd unit depend on wireguard--untested and how will wireguard behave? Probably won't go with this one.
-    * Have the wireguard systemd unit automatically add/remove nftables rules on start/stop (this is how wireguard usually works with iptables). networking.wireguard.interfaces.<name>.{preSetup, postSetup, postShutdown} are list of commands concatenated by `\n`--which means I can add/remove the vpn-specific nftables rules using the `nft` command. Here's what I would have to do:
-        * Have the wireguard service create its own ingress chain instead of referencing the wireguard interface in the original ingress chain.
-        * add a rule to ingress_wan chain to accept incoming connections on the vpn port (will need to figure out handles because this accept port should take precedence over the final drop rule)
-        * append a rule to inbound_wan `udp dport ${addresses.vpn.port} accept`
-        * append a rule to inbound chain `iifname ${interfaces.vpn.name} jump inbound_vpn`
-        * append a rule to the forward chain `iifname ${interfaces.vpn.name} oifname { ${interfaces.lan.name}, lo } accept`~~
+* ~~on reboot, nftables fails to come up because it depends on the wireguard interface existing. 2 options for solutions:~~
+    * ~~Have the wireguard systemd unit automatically add/remove nftables rules on start/stop (this is how wireguard usually works with iptables). networking.wireguard.interfaces.<name>.{preSetup, postSetup, postShutdown} are list of commands concatenated by `\n`--which means I can add/remove the vpn-specific nftables rules using the `nft` command. Here's what I would have to do:~~
+        * ~~Have the wireguard service create its own ingress chain instead of referencing the wireguard interface in the original ingress chain.~~
+        * ~~add a rule to ingress_wan chain to accept incoming connections on the vpn port (will need to figure out handles because this accept port should take precedence over the final drop rule)~~
+        * ~~append a rule to inbound_wan `udp dport ${addresses.vpn.port} accept`~~
+        * ~~append a rule to inbound chain `iifname ${interfaces.vpn.name} jump inbound_vpn`~~
+        * ~~append a rule to the forward chain `iifname ${interfaces.vpn.name} oifname { ${interfaces.lan.name}, lo } accept`~~
 * ~~Add wireguard vpn server (will require nftables configuration)~~
 * ~~Switch from dnsmasq to BIND~~
 * ~~Swap DHCP server from dnsmasq to Kea~~
