@@ -3,7 +3,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     ./fish.nix
     ./nushell
@@ -15,9 +16,7 @@
   ];
 
   home.packages = builtins.attrValues {
-    inherit
-      (pkgs)
-      nixFlakes
+    inherit (pkgs)
       jq
       tealdeer
       unzip
