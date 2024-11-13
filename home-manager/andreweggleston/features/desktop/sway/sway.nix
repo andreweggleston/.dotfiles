@@ -4,7 +4,8 @@
   pkgs,
   inputs,
   ...
-}: let
+}:
+let
   inherit (lib) mkIf;
   inherit (lib.attrsets) optionalAttrs;
   inherit (lib.lists) optionals;
@@ -34,7 +35,8 @@
 
     client.background       #${base00}
   '';
-in {
+in
+{
   imports = [
     ./waybar
     ./swaylock.nix
@@ -51,7 +53,7 @@ in {
   '';
 
   home.packages = builtins.attrValues {
-    inherit (pkgs) wl-clipboard albert;
+    inherit (pkgs) wl-clipboard;
   };
 
   # add pbcopy & pbpaste aliases for clipboard
@@ -67,25 +69,23 @@ in {
     config = {
       modifier = "Mod4";
       terminal = config.home.sessionVariables.TERMINAL;
-      output =
-        output-config
-        // {
-          "*" = {
-            bg = "${background-image} fill";
-          };
+      output = output-config // {
+        "*" = {
+          bg = "${background-image} fill";
         };
+      };
       window.hideEdgeBorders = "both";
       fonts = {
-        names = ["FiraCode Nerd Font"];
+        names = [ "FiraCode Nerd Font" ];
         style = "Regular";
         size = 12.0;
       };
 
-      keybindings = let
-        modifier = config.wayland.windowManager.sway.config.modifier;
-      in
+      keybindings =
+        let
+          modifier = config.wayland.windowManager.sway.config.modifier;
+        in
         lib.mkOptionDefault {
-          "${modifier}+space" = "exec ${pkgs.albert}/bin/albert show";
           "${modifier}+l" = "exec ${lock-cmd}";
           "${modifier}+i" = "exec firefox";
           "${modifier}+Shift+i" = "exec firefox --private-window";
@@ -96,9 +96,8 @@ in {
       focus.wrapping = "no";
 
       startup = [
-        {command = "eval $(gnome-keyring-daemon --start --components=secrets);";}
-        {command = "${pkgs.albert}/bin/albert";}
-        {command = "nm-applet";}
+        { command = "eval $(gnome-keyring-daemon --start --components=secrets);"; }
+        { command = "nm-applet"; }
       ];
 
       # set cursor size
