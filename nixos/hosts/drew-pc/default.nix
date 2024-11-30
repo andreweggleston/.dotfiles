@@ -6,7 +6,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -14,6 +15,7 @@
     ../../common.nix
 
     ../../features/sound.nix
+    ../../features/bluetooth.nix
 
     ../../features/kde.nix
     # ../../features/i3.nix
@@ -23,7 +25,7 @@
 
   home-manager.users.andreweggleston = import ../../../home-manager/andreweggleston/hosts/drew-pc.nix;
 
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   services.flatpak.enable = true;
 
@@ -34,16 +36,9 @@
       powerManagement.finegrained = false;
       open = false;
       nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
-        version = "560.35.03";
-        sha256_64bit = "sha256-8pMskvrdQ8WyNBvkU/xPc/CtcYXCa7ekP73oGuKfH+M=";
-        sha256_aarch64 = "sha256-s8ZAVKvRNXpjxRYqM3E5oss5FdqW+tv1qQC2pDjfG+s=";
-        openSha256 = "sha256-/32Zf0dKrofTmPZ3Ratw4vDM7B+OgpC4p7s+RHUjCrg=";
-        settingsSha256 = "sha256-kQsvDgnxis9ANFmwIwB7HX5MkIAcpEEAHc8IBOLdXvk=";
-        persistencedSha256 = "sha256-E2J2wYYyRu7Kc3MMZz/8ZIemcZg68rkzvqEwFAL3fFs=";
-      };
+      package = config.boot.kernelPackages.nvidiaPackages.beta;
     };
-    opengl = {
+    graphics = {
       enable = true;
       extraPackages = with pkgs; [
         vaapiVdpau
@@ -57,15 +52,15 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    kernelPackages = pkgs.linuxPackages-rt_latest;
+    kernelPackages = pkgs.linuxPackages_6_6;
   };
   networking.hostName = "drew-pc"; # Define your hostname.
 
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
-  time.timeZone = "America/New_York";
+  # Set your time zone. Unnecessary if automatic-timezoned is enabled
+  # time.timeZone = "America/New_York";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -93,12 +88,13 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = let
-    nvidiaEnabled = lib.elem "nvidia" config.services.xserver.videoDrivers;
-  in
+  environment.systemPackages =
+    let
+      nvidiaEnabled = lib.elem "nvidia" config.services.xserver.videoDrivers;
+    in
     lib.optionals nvidiaEnabled [
       (config.hardware.nvidia.package.settings.overrideAttrs (oldAttrs: {
-        buildInputs = oldAttrs.buildInputs ++ [pkgs.vulkan-headers];
+        buildInputs = oldAttrs.buildInputs ++ [ pkgs.vulkan-headers ];
       }))
     ];
 
