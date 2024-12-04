@@ -34,6 +34,12 @@ let
     client.placeholder      #${base00} #${base04} #${base07} #${base00}   #${base04}
 
     client.background       #${base00}
+
+  '';
+
+  gesture-config = ''
+    bindgesture swipe:3:left workspace prev
+    bindgesture swipe:3:right workspace next
   '';
 in
 {
@@ -106,7 +112,7 @@ in
 
     systemd.enable = true;
 
-    extraConfig = color-config;
+    extraConfig = color-config + gesture-config;
 
     extraSessionCommands = ''
       export QT_AUTO_SCREN_SCALING_FACTOR=1
