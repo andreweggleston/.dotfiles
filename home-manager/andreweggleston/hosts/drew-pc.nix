@@ -5,7 +5,8 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   imports = [
     ../global
     ../features/desktop/common
