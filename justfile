@@ -27,7 +27,7 @@ reload-skhd:
   launchctl stop org.nixos.skhd && launchctl start org.nixos.skhd && sleep 1 && skhd -r
 
 # on asahi linux, we need to pass the --impure flag to read in firmware files
-rebuild_flags := `if [ -d /boot/asahi ]; then echo "--impure"; else echo ""; fi`
+rebuild_flags := `if [ -d /boot/asahi ]; then echo "--impure"; else echo "--impure"; fi`
 
 
 # Build the NixOS configuration without switching to it

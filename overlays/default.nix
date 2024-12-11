@@ -15,6 +15,9 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
+    renoise = prev.renoise.override {
+      releasePath = /home/andreweggleston/Downloads/rns_344_linux_x86_64.tar.gz;
+    };
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
