@@ -6,5 +6,6 @@
   home.packages = [
     pkgs.bitwig-studio5
     pkgs.renoise
+    pkgs.audacity
   ];
 }
