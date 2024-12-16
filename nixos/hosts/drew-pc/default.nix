@@ -21,6 +21,7 @@
     # ../../features/i3.nix
 
     ../../features/steam.nix
+    ../../features/sunshine.nix
   ];
 
   home-manager.users.andreweggleston = import ../../../home-manager/andreweggleston/hosts/drew-pc.nix;
