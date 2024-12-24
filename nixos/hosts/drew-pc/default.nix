@@ -86,6 +86,9 @@
     variant = "";
   };
 
+  # Enable X11 forwarding for ssh clients who request it
+  services.openssh.settings.X11Forwarding = true;
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
