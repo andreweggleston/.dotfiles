@@ -2,10 +2,19 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   users.users.andreweggleston = {
     isNormalUser = true;
-    extraGroups = ["wheel" "docker" "onepassword" "video" "libvirtd" "audio"];
+    extraGroups = [
+      "wheel"
+      "docker"
+      "onepassword"
+      "video"
+      "libvirtd"
+      "audio"
+      "input"
+    ];
     shell = pkgs.fish;
 
     openssh.authorizedKeys.keys = [
@@ -19,33 +28,48 @@
   # allow running nixos-rebuild as root without a password.
   # requires us to explicitly pull in nixos-rebuild from pkgs, so
   # we get the right path in the sudo config
-  environment.systemPackages = [pkgs.nixos-rebuild];
+  environment.systemPackages = [ pkgs.nixos-rebuild ];
   security.sudo.extraRules = [
     {
-      users = ["andreweggleston"];
+      users = [ "andreweggleston" ];
       commands = [
         {
           command = "${pkgs.nixos-rebuild}/bin/nixos-rebuild";
-          options = ["NOPASSWD" "SETENV"];
+          options = [
+            "NOPASSWD"
+            "SETENV"
+          ];
         }
         {
           command = "/run/current-system/sw/bin/nixos-rebuild";
-          options = ["NOPASSWD" "SETENV"];
+          options = [
+            "NOPASSWD"
+            "SETENV"
+          ];
         }
         {
           command = "${pkgs.systemd}/bin/systemctl";
-          options = ["NOPASSWD" "SETENV"];
+          options = [
+            "NOPASSWD"
+            "SETENV"
+          ];
         }
         # reboot and shutdown are symlinks to systemctl,
         # but need to be authorized in addition to the systemctl binary
         # to allow nopasswd sudo
         {
           command = "/run/current-system/sw/bin/shutdown";
-          options = ["NOPASSWD" "SETENV"];
+          options = [
+            "NOPASSWD"
+            "SETENV"
+          ];
         }
         {
           command = "/run/current-system/sw/bin/reboot";
-          options = ["NOPASSWD" "SETENV"];
+          options = [
+            "NOPASSWD"
+            "SETENV"
+          ];
         }
       ];
     }
