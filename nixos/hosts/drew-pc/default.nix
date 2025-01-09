@@ -20,6 +20,7 @@
     # ../../features/i3.nix
 
     ../../features/kvm.nix
+    ../../features/k3s.nix
 
     ../../features/steam.nix
     ../../features/sunshine.nix
