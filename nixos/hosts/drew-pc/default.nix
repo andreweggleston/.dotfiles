@@ -29,7 +29,10 @@
 
   services.xserver.videoDrivers = ["nvidia"];
 
-  services.flatpak.enable = true;
+  services.displayManager.autoLogin = {
+    user = "andreweggleston";
+    enable = true;
+  };
 
   hardware = {
     nvidia = {
