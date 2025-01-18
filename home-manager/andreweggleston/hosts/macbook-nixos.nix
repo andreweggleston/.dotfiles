@@ -1,9 +1,15 @@
-{ inputs, outputs, lib, pkgs, config, ... }:
 {
+  inputs,
+  outputs,
+  lib,
+  pkgs,
+  config,
+  ...
+}: {
   imports = [
     ../global
     ../features/desktop/common
-    ../features/desktop/sway 
+    ../features/desktop/sway
     ../features/desktop/sway/natural-scrolling.nix
   ];
 

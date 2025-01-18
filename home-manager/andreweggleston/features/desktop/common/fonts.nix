@@ -1,5 +1,9 @@
-{ config, lib, pkgs, ... }:
-let 
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   mkFontOption = kind: {
     family = lib.mkOption {
       type = lib.types.str;
@@ -16,18 +20,16 @@ let
   };
   cfg = config.fontProfiles;
 in {
-  
   options.fontProfiles = {
     monospace = mkFontOption "monospace";
     regular = mkFontOption "regular";
   };
 
-
   config = {
     fontProfiles = {
       monospace = {
         family = "FiraCode Nerd Font";
-        package = pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; };
+        package = pkgs.nerdfonts.override {fonts = ["FiraCode"];};
       };
       regular = {
         family = "Fira Sans";

@@ -1,19 +1,22 @@
-{ lib, pkgs, config, ... }:
-let
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}: let
   oh-my-tmux = pkgs.fetchFromGitHub {
     owner = "gpakosz";
     repo = ".tmux";
     rev = "5641d3b3f5f9c353c58dfcba4c265df055a05b6b";
     sha256 = "sha256-BTeej1vzyYx068AnU8MjbQKS9veS2jOS+CaJazCtP6s=";
 
-    # see https://github.com/NixOS/nixpkgs/issues/80109#issuecomment-1172953187  
+    # see https://github.com/NixOS/nixpkgs/issues/80109#issuecomment-1172953187
     stripRoot = false;
   };
   tmux-conf = "${oh-my-tmux}/.tmux-${oh-my-tmux.rev}/.tmux.conf";
 
   inherit (config.colorScheme) colors;
-in
-{
+in {
   home.packages = [
     pkgs.tmux
   ];
@@ -25,8 +28,7 @@ in
 
   home.file.tmux-conf-local = {
     target = ".tmux.conf.local";
-    text = 
-    ''
+    text = ''
       # use Powerline symbols in status bar
       tmux_conf_theme_left_separator_main='\uE0B0'
       tmux_conf_theme_left_separator_sub='\uE0B1'
@@ -48,8 +50,8 @@ in
       tmux_conf_copy_to_os_clipboard=true
 
       # retain current path for new windows
-      tmux_conf_new_window_retain_current_path=true      
-      
+      tmux_conf_new_window_retain_current_path=true
+
       # just use C-b as prefix instead of C-b and C-a
       set -gu prefix2
       unbind C-a
@@ -70,7 +72,7 @@ in
 
       # use colors from current color color scheme
       # based on default ansi theme for "oh my tmux" config,
-      # with colors from current "base 16" color scheme 
+      # with colors from current "base 16" color scheme
       tmux_conf_theme_colour_1="#${colors.base00}"
       tmux_conf_theme_colour_2="#${colors.base08}"
       tmux_conf_theme_colour_3="#${colors.base08}"
@@ -98,7 +100,7 @@ in
     '';
   };
 
-  #programs.fish.interactiveShellInit = 
+  #programs.fish.interactiveShellInit =
   #''
   #  # auto-start tmux, if we're not already in a tmux session.
   #  # the destroy-unattached option prevents stale sessions from
@@ -106,6 +108,6 @@ in
   #
   #  if not set -q TMUX
   #    tmux new-session -t main \; set-option destroy-unattached
-  #  end    
+  #  end
   #'';
 }

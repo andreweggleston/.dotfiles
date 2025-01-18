@@ -4,8 +4,7 @@
   pkgs,
   inputs,
   ...
-}:
-let
+}: let
   inherit (lib) mkIf;
   inherit (lib.attrsets) optionalAttrs;
   inherit (lib.lists) optionals;
@@ -41,8 +40,7 @@ let
     bindgesture swipe:3:left workspace prev
     bindgesture swipe:3:right workspace next
   '';
-in
-{
+in {
   imports = [
     ./waybar
     ./swaylock.nix
@@ -75,22 +73,23 @@ in
     config = {
       modifier = "Mod4";
       terminal = config.home.sessionVariables.TERMINAL;
-      output = output-config // {
-        "*" = {
-          bg = "${background-image} fill";
+      output =
+        output-config
+        // {
+          "*" = {
+            bg = "${background-image} fill";
+          };
         };
-      };
       window.hideEdgeBorders = "both";
       fonts = {
-        names = [ "FiraCode Nerd Font" ];
+        names = ["FiraCode Nerd Font"];
         style = "Regular";
         size = 12.0;
       };
 
-      keybindings =
-        let
-          modifier = config.wayland.windowManager.sway.config.modifier;
-        in
+      keybindings = let
+        modifier = config.wayland.windowManager.sway.config.modifier;
+      in
         lib.mkOptionDefault {
           "${modifier}+l" = "exec ${lock-cmd}";
           "${modifier}+i" = "exec firefox";
@@ -102,8 +101,8 @@ in
       focus.wrapping = "no";
 
       startup = [
-        { command = "eval $(gnome-keyring-daemon --start --components=secrets);"; }
-        { command = "nm-applet"; }
+        {command = "eval $(gnome-keyring-daemon --start --components=secrets);";}
+        {command = "nm-applet";}
       ];
 
       # set cursor size

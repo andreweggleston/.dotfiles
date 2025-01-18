@@ -1,5 +1,8 @@
-{ lib, config, ... }:
-let
+{
+  lib,
+  config,
+  ...
+}: let
   inherit (lib) mkOption mkEnableOption mkIf types;
 
   device-submodule = types.submodule {
@@ -35,11 +38,11 @@ in {
 
   config = mkIf cfg.enable {
     boot.extraModulePackages = with config.boot.kernelPackages; [
-        v4l2loopback.out
+      v4l2loopback.out
     ];
 
     boot.kernelModules = [
-        "v4l2loopback"
+      "v4l2loopback"
     ];
 
     boot.extraModprobeConfig = modprobe-config;

@@ -1,12 +1,16 @@
-{ config, lib, pkgs, inputs, outputs, ... }:
-
 {
-  imports =
-    [
-      ./hardware-configuration.nix
+  config,
+  lib,
+  pkgs,
+  inputs,
+  outputs,
+  ...
+}: {
+  imports = [
+    ./hardware-configuration.nix
 
-      ../../common.nix
-    ];
+    ../../common.nix
+  ];
   home-manager.users.andreweggleston = import ../../../home-manager/andreweggleston/hosts/nixos-arm.nix;
 
   boot.loader.systemd-boot.enable = true;
@@ -20,6 +24,4 @@
   ];
 
   system.stateVersion = "24.05"; # Did you read the comment?
-
 }
-

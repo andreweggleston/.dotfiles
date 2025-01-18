@@ -1,7 +1,12 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 pkgs.stdenvNoCC.mkDerivation {
   name = "sf-pro";
-  
+
   src = pkgs.fetchFromGitHub {
     owner = "sahibjotsaggu";
     repo = "San-Francisco-Pro-Fonts";

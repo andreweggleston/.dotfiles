@@ -6,8 +6,7 @@
   pkgs,
   lib,
   ...
-}:
-{
+}: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -28,7 +27,7 @@
 
   home-manager.users.andreweggleston = import ../../../home-manager/andreweggleston/hosts/drew-pc.nix;
 
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = ["nvidia"];
 
   services.flatpak.enable = true;
 
@@ -94,13 +93,12 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages =
-    let
-      nvidiaEnabled = lib.elem "nvidia" config.services.xserver.videoDrivers;
-    in
+  environment.systemPackages = let
+    nvidiaEnabled = lib.elem "nvidia" config.services.xserver.videoDrivers;
+  in
     lib.optionals nvidiaEnabled [
       (config.hardware.nvidia.package.settings.overrideAttrs (oldAttrs: {
-        buildInputs = oldAttrs.buildInputs ++ [ pkgs.vulkan-headers ];
+        buildInputs = oldAttrs.buildInputs ++ [pkgs.vulkan-headers];
       }))
     ];
 

@@ -1,5 +1,9 @@
-{ config, lib, pkgs, ...}:
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   # configure npm to install global packages to ~/.npm-packages
   # based on this blog post: https://matthewrhone.dev/nixos-npm-globally
 
@@ -12,7 +16,7 @@
   '';
 
   programs.fish.shellInit = ''
-  set -x PATH $PATH $HOME/.npm-packages/bin
-  set -x NODE_PATH $HOME/.npm-packages/lib/node_modules
+    set -x PATH $PATH $HOME/.npm-packages/bin
+    set -x NODE_PATH $HOME/.npm-packages/lib/node_modules
   '';
 }

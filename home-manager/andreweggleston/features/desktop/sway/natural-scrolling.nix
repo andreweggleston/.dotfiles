@@ -1,11 +1,10 @@
-{ config, ... }:
-{
+{config, ...}: {
   wayland.windowManager.sway.config.input = {
-    "type:pointer" = { 
+    "type:pointer" = {
       natural_scroll = "disabled";
     };
 
-    "type:touchpad" = { 
+    "type:touchpad" = {
       natural_scroll = "disabled";
     };
 

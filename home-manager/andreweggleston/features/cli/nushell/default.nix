@@ -1,5 +1,9 @@
-{ pkgs, config, lib, ... }:
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   programs.nushell = {
     enable = true;
 
@@ -14,10 +18,10 @@
   };
 
   home.packages = builtins.attrValues {
-    inherit (pkgs)
+    inherit
+      (pkgs)
       starship
       any-nix-shell
       ;
   };
-
 }

@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
-let
+{
+  config,
+  pkgs,
+  ...
+}: let
   inherit (config.colorScheme) colors;
 in {
   programs.swaylock = {

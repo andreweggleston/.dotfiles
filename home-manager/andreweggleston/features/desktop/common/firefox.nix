@@ -1,5 +1,10 @@
-{ config, lib, pkgs, inputs, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: let
   inherit (lib) mkIf;
   inherit (pkgs.stdenv) isLinux;
   addons = pkgs.nur.repos.rycee.firefox-addons;
@@ -26,15 +31,15 @@ in {
         };
       };
     };
-    
+
     xdg = {
       mime.enable = true;
       mimeApps.enable = true;
       mimeApps.defaultApplications = {
-        "text/html" = [ "firefox.desktop" ];
-        "text/xml" = [ "firefox.desktop" ];
-        "x-scheme-handler/http" = [ "firefox.desktop" ];
-        "x-scheme-handler/https" = [ "firefox.desktop" ];
+        "text/html" = ["firefox.desktop"];
+        "text/xml" = ["firefox.desktop"];
+        "x-scheme-handler/http" = ["firefox.desktop"];
+        "x-scheme-handler/https" = ["firefox.desktop"];
       };
     };
   };

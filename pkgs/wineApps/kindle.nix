@@ -2,14 +2,14 @@
 # Note that the system trust store needs to have a specific verisign root certificate
 # installed. See nixos/features/kindle/default.nix in this repo for that bit, plus
 # a script to extract the decryption key from the installed app.
-
-{ pkgs
-, fetchurl
-, makeDesktopItem
-, symlinkJoin
-, wrapWine
-, ... }:
-let
+{
+  pkgs,
+  fetchurl,
+  makeDesktopItem,
+  symlinkJoin,
+  wrapWine,
+  ...
+}: let
   source = fetchurl {
     url = "https://ia600909.us.archive.org/6/items/kindle-for-pc-1-17-44170/kindle-for-pc-1-17-44170.exe";
     sha256 = "001j2r2024icfr8nk6z9pxzp0krlf30jv2a6qk3w0xhj7w2z1q0l";
@@ -29,7 +29,7 @@ let
       echo "installing Kindle for PC"
       wine ${source} /S
 
-      # create the default content folder 
+      # create the default content folder
       mkdir -p "$WINE_NIX_PROFILES/${name}/Documents/My Kindle Content"
 
       # set the windows version reported by wine to 8.1, so we can install python 3
@@ -43,7 +43,7 @@ let
       wine py -m pip install pycryptodome
 
       # reset windows version back to win7 to make the Kindle app happy
-      winecfg /v win7   
+      winecfg /v win7
     '';
 
     setupScript = ''
@@ -67,7 +67,8 @@ let
       sha256 = "0jk028paxfgxb3hwkn8igbzx7a7a3aqywz5v2spx920mqdc11bg1";
     };
   };
-in symlinkJoin {
-  name = "kindle";
-  paths = [bin desktop];
-}
+in
+  symlinkJoin {
+    name = "kindle";
+    paths = [bin desktop];
+  }

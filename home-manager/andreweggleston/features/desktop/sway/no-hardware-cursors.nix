@@ -1,6 +1,5 @@
 # fix for invisible cursor when running in vmware or nvida gpus
-{ config, ... }:
-{
+{config, ...}: {
   home.sessionVariables = {
     WLR_NO_HARDWARE_CURSORS = "1";
   };

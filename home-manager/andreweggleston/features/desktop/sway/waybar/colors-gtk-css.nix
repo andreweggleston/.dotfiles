@@ -1,5 +1,4 @@
-{ config, ... }:
-let
+{config, ...}: let
   inherit (config.colorScheme) colors;
 in ''
   @define-color base00 #${colors.base00};

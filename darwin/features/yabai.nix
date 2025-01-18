@@ -1,20 +1,22 @@
-{ config, pkgs, lib, ...}:
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   inherit (lib) lists strings;
 
   floating-apps = [
     "System Settings"
-#    "Zoom"
-#    "zoom.us"
+    #    "Zoom"
+    #    "zoom.us"
   ];
 
-  floating-rules = lists.forEach floating-apps (name: 
-    "yabai -m rule --add app='${name}' manage=off"
-    );
+  floating-rules = lists.forEach floating-apps (
+    name: "yabai -m rule --add app='${name}' manage=off"
+  );
   floating-rules-str = strings.concatStringsSep "\n" floating-rules;
-
-in
-{
+in {
   services.yabai = {
     enable = true;
 
@@ -25,13 +27,15 @@ in
       mouse_modifier = "ctrl";
     };
 
-    extraConfig = floating-rules-str + "\n" 
-    + ''
-      yabai -m config layout bsp
-    '';
+    extraConfig =
+      floating-rules-str
+      + "\n"
+      + ''
+        yabai -m config layout bsp
+      '';
   };
 
-  services.skhd = let 
+  services.skhd = let
     hyper = "cmd + ctrl + alt";
     yabai = "${pkgs.yabai}/bin/yabai";
     alacritty = "${pkgs.alacritty}/bin/alacritty";
@@ -44,9 +48,9 @@ in
 
 
       ${hyper} - return : ${alacritty}
-      ${hyper} - h : ${yabai} -m window --swap west  
-      ${hyper} - j : ${yabai} -m window --swap south  
-      ${hyper} - k : ${yabai} -m window --swap north 
+      ${hyper} - h : ${yabai} -m window --swap west
+      ${hyper} - j : ${yabai} -m window --swap south
+      ${hyper} - k : ${yabai} -m window --swap north
       ${hyper} - l : ${yabai} -m window --swap east
 
       ${hyper} - space : ${yabai} -m window --toggle float
@@ -61,5 +65,4 @@ in
   };
 
   environment.systemPackages = [pkgs.skhd];
-
 }

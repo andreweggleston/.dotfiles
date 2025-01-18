@@ -2,15 +2,14 @@
   addresses,
   interfaces,
   ...
-}:
-{
+}: {
   services = {
     kea = {
       dhcp4 = {
         enable = true;
         settings = {
           interfaces-config = {
-            interfaces = [ interfaces.lan.name ];
+            interfaces = [interfaces.lan.name];
           };
           lease-database = {
             name = "/var/lib/kea/dhcp4.leases";
@@ -54,19 +53,20 @@
                   data = "peckave.home.arpa";
                 }
               ];
-              reservations = map (
-                {
-                  name,
-                  hw_addr,
-                  addr4,
-                  addr6,
-                }:
-                {
-                  hostname = name;
-                  hw-address = hw_addr;
-                  ip-address = addr4;
-                }
-              ) addresses.clients;
+              reservations =
+                map (
+                  {
+                    name,
+                    hw_addr,
+                    addr4,
+                    addr6,
+                  }: {
+                    hostname = name;
+                    hw-address = hw_addr;
+                    ip-address = addr4;
+                  }
+                )
+                addresses.clients;
             }
           ];
         };
@@ -75,7 +75,7 @@
         enable = true;
         settings = {
           interfaces-config = {
-            interfaces = [ interfaces.lan.name ];
+            interfaces = [interfaces.lan.name];
           };
           lease-database = {
             name = "/var/lib/kea/dhcp6.leases";
@@ -115,19 +115,20 @@
                   data = "peckave.home.arpa";
                 }
               ];
-              reservations = map (
-                {
-                  name,
-                  hw_addr,
-                  addr4,
-                  addr6,
-                }:
-                {
-                  hostname = name;
-                  hw-address = hw_addr;
-                  ip-addresses = [ addr6 ];
-                }
-              ) addresses.clients;
+              reservations =
+                map (
+                  {
+                    name,
+                    hw_addr,
+                    addr4,
+                    addr6,
+                  }: {
+                    hostname = name;
+                    hw-address = hw_addr;
+                    ip-addresses = [addr6];
+                  }
+                )
+                addresses.clients;
             }
           ];
         };

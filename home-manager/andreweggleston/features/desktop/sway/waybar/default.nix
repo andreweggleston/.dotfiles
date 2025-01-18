@@ -1,9 +1,13 @@
-{ lib, config, pkgs, ... }:
-let 
-  gtk-colors = import ./colors-gtk-css.nix { inherit config; };
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}: let
+  gtk-colors = import ./colors-gtk-css.nix {inherit config;};
   style = gtk-colors + builtins.readFile ./style.css;
 in {
-  wayland.windowManager.sway.config.bars = [{ command = "waybar"; }];
+  wayland.windowManager.sway.config.bars = [{command = "waybar";}];
 
   programs.waybar = {
     enable = true;
@@ -13,9 +17,9 @@ in {
         layer = "top";
         position = "bottom";
         height = 32;
-        modules-left = [ "sway/workspaces" "sway/mode" "wlr/taskbar" ];
-        modules-center = [ "sway/window" ];
-        modules-right = [ "tray" "custom/clock" "pulseaudio" "battery" ];
+        modules-left = ["sway/workspaces" "sway/mode" "wlr/taskbar"];
+        modules-center = ["sway/window"];
+        modules-right = ["tray" "custom/clock" "pulseaudio" "battery"];
 
         "sway/workspaces" = {
           disable-scroll = true;
@@ -24,7 +28,7 @@ in {
 
         "custom/clock" = {
           return-type = "json";
-          exec =  ''
+          exec = ''
             text=$(date +'%I:%M %p')
             tt=$(date +'%A, %B %d, %Y')
             echo "{\"text\": \"$text\", \"tooltip\": \"$tt\", \"class\": \"custom-clock\"}"
@@ -60,7 +64,7 @@ in {
           format-bluetooth = "{volume}% {icon}";
           format-muted = "";
           format-icons = {
-            headphone =  "";
+            headphone = "";
             hands-free = "";
             headset = "";
             phone = "";
