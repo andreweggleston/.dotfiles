@@ -2,14 +2,15 @@
   addresses,
   interfaces,
   ...
-}: {
+}:
+{
   services = {
     kea = {
       dhcp4 = {
         enable = true;
         settings = {
           interfaces-config = {
-            interfaces = [interfaces.lan.name];
+            interfaces = [ interfaces.lan.name ];
           };
           lease-database = {
             name = "/var/lib/kea/dhcp4.leases";
@@ -31,6 +32,7 @@
           ddns-send-updates = true;
           subnet4 = [
             {
+              id = 1;
               ddns-qualifying-suffix = "peckave.home.arpa";
               ddns-send-updates = true;
               ddns-override-client-update = true;
@@ -52,18 +54,19 @@
                   data = "peckave.home.arpa";
                 }
               ];
-              reservations =
-                map ({
+              reservations = map (
+                {
                   name,
                   hw_addr,
                   addr4,
                   addr6,
-                }: {
+                }:
+                {
                   hostname = name;
                   hw-address = hw_addr;
                   ip-address = addr4;
-                })
-                addresses.clients;
+                }
+              ) addresses.clients;
             }
           ];
         };
@@ -72,7 +75,7 @@
         enable = true;
         settings = {
           interfaces-config = {
-            interfaces = [interfaces.lan.name];
+            interfaces = [ interfaces.lan.name ];
           };
           lease-database = {
             name = "/var/lib/kea/dhcp6.leases";
@@ -94,6 +97,7 @@
           ddns-send-updates = true;
           subnet6 = [
             {
+              id = 1;
               ddns-qualifying-suffix = "peckave.home.arpa";
               ddns-send-updates = true;
               ddns-override-client-update = true;
@@ -111,18 +115,19 @@
                   data = "peckave.home.arpa";
                 }
               ];
-              reservations =
-                map ({
+              reservations = map (
+                {
                   name,
                   hw_addr,
                   addr4,
                   addr6,
-                }: {
+                }:
+                {
                   hostname = name;
                   hw-address = hw_addr;
-                  ip-addresses = [addr6];
-                })
-                addresses.clients;
+                  ip-addresses = [ addr6 ];
+                }
+              ) addresses.clients;
             }
           ];
         };
