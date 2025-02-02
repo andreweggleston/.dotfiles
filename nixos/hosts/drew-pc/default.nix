@@ -19,7 +19,7 @@
     ../../features/kde.nix
     # ../../features/i3.nix
 
-    ../../features/kvm.nix
+    ../../features/podman.nix
     ../../features/k3s.nix
 
     ../../features/steam.nix
@@ -104,6 +104,9 @@
       (config.hardware.nvidia.package.settings.overrideAttrs (oldAttrs: {
         buildInputs = oldAttrs.buildInputs ++ [pkgs.vulkan-headers];
       }))
+    ]
+    ++ [
+      pkgs.distrobox
     ];
 
   system.stateVersion = "24.05"; # Did you read the comment?
