@@ -5,8 +5,9 @@
   pkgs,
   secrets,
   ...
-}: let
-  utils = import ./utils.nix {inherit lib;};
+}:
+let
+  utils = import ./utils.nix { inherit lib; };
   inherit (utils) subnet4ToReverseDomain;
   inherit (utils) subnet6ToReverseDomain;
   home-zoneFile = pkgs.writeText "peckave.home.arpa.zone" ''
@@ -78,12 +79,16 @@
     };
 
     # keys
-    ${lib.strings.concatStringsSep "\n" (map ({
-      name,
-      algorithm,
-      secret,
-    }: ''key ${name} { algorithm ${algorithm}; secret ${secret}; }; '')
-    secrets.hosts.router.dhcp-ddns-keys)}
+    ${lib.strings.concatStringsSep "\n" (
+      map (
+        {
+          name,
+          algorithm,
+          secret,
+        }:
+        ''key ${name} { algorithm ${algorithm}; secret ${secret}; }; ''
+      ) secrets.hosts.router.dhcp-ddns-keys
+    )}
 
     options {
       directory "/run/named";
@@ -103,7 +108,8 @@
       file "${root-hintFile}";
     };
   '';
-in {
+in
+{
   services = {
     bind = {
       enable = true;
