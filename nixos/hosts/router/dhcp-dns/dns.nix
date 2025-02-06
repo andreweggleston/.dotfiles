@@ -89,6 +89,7 @@
       directory "/run/named";
       allow-query { homenets; };
       recursion yes;
+      listen-on { 127.0.0.0/8; ${addresses.lan.ipv4.subnet}; ${addresses.vpn.ipv4.subnet}; };
     };
 
     zone "peckave.home.arpa" IN {
