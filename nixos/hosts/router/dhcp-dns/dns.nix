@@ -108,6 +108,7 @@ in {
     bind = {
       enable = true;
       configFile = bind-configFile;
+      ipv4Only = true;
     };
   };
   systemd.services.bind.preStart = ''
