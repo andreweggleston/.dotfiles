@@ -6,7 +6,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -20,7 +21,6 @@
     # ../../features/i3.nix
 
     ../../features/podman.nix
-    ../../features/k3s.nix
 
     ../../features/steam.nix
     ../../features/sunshine.nix
