@@ -28,7 +28,7 @@
 
   home-manager.users.andreweggleston = import ../../../home-manager/andreweggleston/hosts/drew-pc.nix;
 
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   services.displayManager.autoLogin = {
     user = "andreweggleston";
@@ -42,7 +42,13 @@
       powerManagement.finegrained = false;
       open = false;
       nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.beta;
+      package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
+        version = "570.86.16"; # use new 570 drivers
+        sha256_64bit = "sha256-RWPqS7ZUJH9JEAWlfHLGdqrNlavhaR1xMyzs8lJhy9U=";
+        openSha256 = "sha256-DuVNA63+pJ8IB7Tw2gM4HbwlOh1bcDg2AN2mbEU9VPE=";
+        settingsSha256 = "sha256-9rtqh64TyhDF5fFAYiWl3oDHzKJqyOW3abpcf2iNRT8=";
+        usePersistenced = false;
+      };
     };
     graphics = {
       enable = true;
@@ -97,12 +103,13 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = let
-    nvidiaEnabled = lib.elem "nvidia" config.services.xserver.videoDrivers;
-  in
+  environment.systemPackages =
+    let
+      nvidiaEnabled = lib.elem "nvidia" config.services.xserver.videoDrivers;
+    in
     lib.optionals nvidiaEnabled [
       (config.hardware.nvidia.package.settings.overrideAttrs (oldAttrs: {
-        buildInputs = oldAttrs.buildInputs ++ [pkgs.vulkan-headers];
+        buildInputs = oldAttrs.buildInputs ++ [ pkgs.vulkan-headers ];
       }))
     ]
     ++ [
