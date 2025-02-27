@@ -38,100 +38,108 @@
     firefox-addons.url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    ...
-  } @ inputs: let
-    inherit (self) outputs;
-    forAllSystems = nixpkgs.lib.genAttrs [
-      "aarch64-linux"
-      # "i686-linux"
-      "x86_64-linux"
-      "aarch64-darwin"
-      # "x86_64-darwin"
-    ];
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
+    let
+      inherit (self) outputs;
+      forAllSystems = nixpkgs.lib.genAttrs [
+        "aarch64-linux"
+        # "i686-linux"
+        "x86_64-linux"
+        "aarch64-darwin"
+        # "x86_64-darwin"
+      ];
 
-    secrets = builtins.fromJSON (builtins.readFile "${self}/secrets.json");
+      secrets = builtins.fromJSON (builtins.readFile "${self}/secrets.json");
 
-    mkNixos = modules:
-      nixpkgs.lib.nixosSystem {
-        inherit modules;
-        specialArgs = {
-          inherit inputs outputs secrets;
+      mkNixos =
+        modules:
+        nixpkgs.lib.nixosSystem {
+          inherit modules;
+          specialArgs = {
+            inherit inputs outputs secrets;
+          };
         };
+
+      mkDarwin =
+        system: modules:
+        inputs.darwin.lib.darwinSystem {
+          inherit modules system inputs;
+          specialArgs = {
+            inherit inputs outputs;
+          };
+        };
+
+      mkHome =
+        modules: pkgs:
+        home-manager.lib.homeManagerConfiguration {
+          inherit modules pkgs;
+          extraSpecialArgs = {
+            inherit inputs outputs;
+          };
+        };
+    in
+    rec {
+      # Your custom packages
+      # Acessible through 'nix build', 'nix shell', etc
+      packages = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        import ./pkgs { inherit pkgs; }
+      );
+      # Devshell for bootstrapping
+      # Acessible through 'nix develop' or 'nix-shell' (legacy)
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        import ./shell.nix { inherit pkgs; }
+      );
+
+      # Your custom packages and modifications, exported as overlays
+      overlays = import ./overlays { inherit inputs; };
+      # Reusable nixos modules you might want to export
+      # These are usually stuff you would upstream into nixpkgs
+      nixosModules = import ./modules/nixos;
+      # Reusable home-manager modules you might want to export
+      # These are usually stuff you would upstream into home-manager
+      homeManagerModules = import ./modules/home-manager;
+
+      # NixOS configuration entrypoint
+      # Available through 'nixos-rebuild --flake .#your-hostname'
+      nixosConfigurations = {
+        # rose gold m2 macbook air
+        macbook-nixos = mkNixos [ ./nixos/hosts/macbook-nixos ];
+        # vm on kilpisjarvi
+        nix-devbox = mkNixos [ ./nixos/hosts/nix-devbox ];
+        # home router -- qotom j6412
+        router = mkNixos [ ./nixos/hosts/router ];
+        # aarch64 vm on kilpisjarvi
+        nixos-arm = mkNixos [ ./nixos/hosts/nixos-arm ];
+        # home pc -- ryzen 7900x + RTX 4070ts
+        drew-pc = mkNixos [ ./nixos/hosts/drew-pc ];
       };
 
-    mkDarwin = system: modules:
-      inputs.darwin.lib.darwinSystem {
-        inherit modules system inputs;
-        specialArgs = {
-          inherit inputs outputs;
-        };
+      darwinConfigurations = {
+        # eg
+        # {hostname} = mkDarwin "aarch64-darwin" [ ./darwin/hosts/{hostname}.nix ];
+
+        # midnight blue m2 macbook air
+        andrew-m2-air = mkDarwin "aarch64-darwin" [ ./darwin/hosts/macbook.nix ];
       };
 
-    mkHome = modules: pkgs:
-      home-manager.lib.homeManagerConfiguration {
-        inherit modules pkgs;
-        extraSpecialArgs = {
-          inherit inputs outputs;
-        };
+      # Standalone home-manager configuration entrypoint
+      # Available through 'home-manager --flake .#your-username@your-hostname'
+      homeConfigurations = {
+        # TODO: add generic standalone home-manager config
       };
-  in rec {
-    # Your custom packages
-    # Acessible through 'nix build', 'nix shell', etc
-    packages = forAllSystems (
-      system: let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in
-        import ./pkgs {inherit pkgs;}
-    );
-    # Devshell for bootstrapping
-    # Acessible through 'nix develop' or 'nix-shell' (legacy)
-    devShells = forAllSystems (
-      system: let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in
-        import ./shell.nix {inherit pkgs;}
-    );
-
-    # Your custom packages and modifications, exported as overlays
-    overlays = import ./overlays {inherit inputs;};
-    # Reusable nixos modules you might want to export
-    # These are usually stuff you would upstream into nixpkgs
-    nixosModules = import ./modules/nixos;
-    # Reusable home-manager modules you might want to export
-    # These are usually stuff you would upstream into home-manager
-    homeManagerModules = import ./modules/home-manager;
-
-    # NixOS configuration entrypoint
-    # Available through 'nixos-rebuild --flake .#your-hostname'
-    nixosConfigurations = {
-      # rose gold m2 macbook air
-      macbook-nixos = mkNixos [./nixos/hosts/macbook-nixos];
-      # vm on kilpisjarvi
-      nix-devbox = mkNixos [./nixos/hosts/nix-devbox];
-      # home router -- qotom j6412
-      router = mkNixos [./nixos/hosts/router];
-      # aarch64 vm on kilpisjarvi
-      nixos-arm = mkNixos [./nixos/hosts/nixos-arm];
-      # home pc -- ryzen 7900x + RTX 4070ts
-      drew-pc = mkNixos [./nixos/hosts/drew-pc];
     };
-
-    darwinConfigurations = {
-      # eg
-      # {hostname} = mkDarwin "aarch64-darwin" [ ./darwin/hosts/{hostname}.nix ];
-
-      # midnight blue m2 macbook air
-      andrew-m2-air = mkDarwin "aarch64-darwin" [./darwin/hosts/macbook.nix];
-    };
-
-    # Standalone home-manager configuration entrypoint
-    # Available through 'home-manager --flake .#your-username@your-hostname'
-    homeConfigurations = {
-      # TODO: add generic standalone home-manager config
-    };
-  };
 }
