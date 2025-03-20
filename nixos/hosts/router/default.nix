@@ -78,6 +78,15 @@
     };
   };
 in {
+  nixpkgs = {
+    overlays = [
+      (final: prev: {
+        ulogd = prev.ulogd.overrideAttrs (oldAttrs: {
+          src = fetchGit { url = "https://git.netfilter.org/ulogd2"; };
+        });
+      })
+    ];
+  };
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -111,8 +120,33 @@ in {
 
   environment.systemPackages = [
     pkgs.dig.out # for tsig-keygen
+    pkgs.ulogd
   ];
 
+  services.ulogd = {
+    enable = true;
+    logLevel = 1;
+    settings = {
+      pgsql1 = {
+        inherit (secrets.hosts.router.ulogd.db) db;
+        inherit (secrets.hosts.router.ulogd.db) host;
+        inherit (secrets.hosts.router.ulogd.db) user;
+        inherit (secrets.hosts.router.ulogd.db) pass;
+        inherit (secrets.hosts.router.ulogd.db) port;
+        inherit (secrets.hosts.router.ulogd.db) schema;
+        inherit (secrets.hosts.router.ulogd.db) table;
+        procedure = "INSERT_PACKET_FULL";
+      };
+      global = {
+        stack = [
+          "log1:NFLOG,base1:BASE,ip2str1:IP2STR,ifi1:IFINDEX,mac2str1:HWHDR,pgsql1:PGSQL"
+        ];
+      };
+      log1 = {
+        group = 1;
+      };
+    };
+  };
   networking = {
     hostName = "router";
     hosts = {
