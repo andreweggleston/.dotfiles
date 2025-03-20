@@ -3,7 +3,8 @@
   pkgs,
   secrets,
   ...
-}: let
+}:
+let
   inherit (lib.attrsets) mapAttrsToList;
   lan4 = secrets.hosts.router.networks.lan.base4;
   lan6 = secrets.hosts.router.networks.lan.base6;
@@ -42,25 +43,27 @@
         };
       };
     };
-    clients =
-      map ({
+    clients = map (
+      {
         name,
         hw_addr,
         addr,
-      }: {
+      }:
+      {
         inherit name;
         inherit hw_addr;
         addr4 = "${lan4}.${addr}";
         addr6 = "${lan6}${addr}";
-      })
-      secrets.hosts.router.dhcp_reservations;
-    vpn-clients =
-      mapAttrsToList (name: value: {
-        inherit name;
-        publicKey = value.public-key;
-        allowedIPs = ["${addresses.vpn.ipv4.base}.${value.address}/32" "${addresses.vpn.ipv6.base}${value.address}/128"];
-      })
-      secrets.vpn.reservations;
+      }
+    ) secrets.hosts.router.dhcp_reservations;
+    vpn-clients = mapAttrsToList (name: value: {
+      inherit name;
+      publicKey = value.public-key;
+      allowedIPs = [
+        "${addresses.vpn.ipv4.base}.${value.address}/32"
+        "${addresses.vpn.ipv6.base}${value.address}/128"
+      ];
+    }) secrets.vpn.reservations;
   };
   interfaces = {
     renames = secrets.hosts.router.interfaces;
@@ -77,7 +80,8 @@
       name = "wg0";
     };
   };
-in {
+in
+{
   nixpkgs = {
     overlays = [
       (final: prev: {
@@ -147,11 +151,15 @@ in {
       };
     };
   };
+
   networking = {
     hostName = "router";
     hosts = {
-      "127.0.0.2" = lib.mkForce [];
-      ${addresses.lan.ipv4.addr} = ["router" "router.peckave.local"]; # for some reason /etc/hosts has an entry "127.0.0.2 router" and no that 2 is not a typo
+      "127.0.0.2" = lib.mkForce [ ];
+      ${addresses.lan.ipv4.addr} = [
+        "router"
+        "router.peckave.home.arpa"
+      ]; # for some reason /etc/hosts has an entry "127.0.0.2 router" and no that 2 is not a typo
     };
   };
 
