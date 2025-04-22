@@ -5,26 +5,23 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   inherit (pkgs.stdenv) isDarwin;
-  homeDirectory =
-    if isDarwin
-    then "/Users/andreweggleston"
-    else "/home/andreweggleston";
-in {
-  imports =
-    [
-      ./colors.nix
-      ../features/cli
-    ]
-    ++ (builtins.attrValues outputs.homeManagerModules);
+  homeDirectory = if isDarwin then "/Users/andreweggleston" else "/home/andreweggleston";
+in
+{
+  imports = [
+    ./colors.nix
+    ../features/cli
+  ] ++ (builtins.attrValues outputs.homeManagerModules);
 
   nixpkgs = {
     overlays = [
       outputs.overlays.additions
       outputs.overlays.modifications
       outputs.overlays.unstable-packages
-      inputs.nur.overlay
+      inputs.nur.overlays.default
     ];
     config = {
       allowUnfree = true;
