@@ -162,6 +162,18 @@ in
       ]; # for some reason /etc/hosts has an entry "127.0.0.2 router" and no that 2 is not a typo
     };
   };
+  nix = {
+    distributedBuilds = true;
+    buildMachines = [
+      {
+        system = "x86_64-linux";
+        sshUser = "andreweggleston";
+        sshKey = "/home/andreweggleston/.ssh/id_ed25519";
+        hostName = "kilpisjarvi.peckave.home.arpa";
+      }
+    ];
+    settings.trusted-users = [ "andreweggleston" ];
+  };
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
