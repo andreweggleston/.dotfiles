@@ -1,4 +1,5 @@
-{...}: {
+{ ... }:
+{
   programs.ssh = {
     enable = true;
     extraConfig = ''
@@ -21,7 +22,7 @@
         user = "aegglest";
       };
       kilpisjarvi = {
-        hostname = "kilpisjarvi.peckave.local";
+        hostname = "kilpisjarvi.peckave.home.arpa";
         user = "root";
       };
     };
