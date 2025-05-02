@@ -29,7 +29,10 @@ in
         ${nft}/bin/nft add rule inet global inbound iifname ${interfaces.vpn.name} jump inbound_vpn
 
         # append accept iifname vpn oifname { lan, lo } rule to forward chain in global table
-        ${nft}/bin/nft add rule inet global forward iifname ${interfaces.vpn.name} oifname { ${interfaces.lan.name}, lo } accept
+        ${nft}/bin/nft add rule inet global forward iifname ${interfaces.vpn.name} oifname { ${interfaces.lan.name}, lo, ${interfaces.wan.name} } accept
+
+        # do nat for vpn
+        ${nft}/bin/nft add rule inet global postrouting ip saddr ${addresses.vpn.ipv4.subnet} oifname ${interfaces.wan.name} masquerade
       '';
       postShutdown = ''
         # inverse of postSetup -- remove all rules added AND NOTHING MORE
