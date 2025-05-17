@@ -162,6 +162,14 @@ in
       ]; # for some reason /etc/hosts has an entry "127.0.0.2 router" and no that 2 is not a typo
     };
   };
+
+  services.openssh.listenAddresses = [
+    {
+      inherit (addresses.lan.ipv4) addr;
+      port = 22;
+    }
+  ];
+
   nix = {
     distributedBuilds = true;
     buildMachines = [
