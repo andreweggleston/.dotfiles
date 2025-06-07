@@ -118,14 +118,12 @@
       nixosConfigurations = {
         # rose gold m2 macbook air
         macbook-nixos = mkNixos [ ./nixos/hosts/macbook-nixos ];
-        # vm on kilpisjarvi
-        nix-devbox = mkNixos [ ./nixos/hosts/nix-devbox ];
         # home router -- qotom j6412
         router = mkNixos [ ./nixos/hosts/router ];
-        # aarch64 vm on kilpisjarvi
-        nixos-arm = mkNixos [ ./nixos/hosts/nixos-arm ];
         # home pc -- ryzen 7900x + RTX 4070ts
         drew-pc = mkNixos [ ./nixos/hosts/drew-pc ];
+        # nas
+        nascar = mkNixos [ ./nixos/hosts/nascar ];
       };
 
       darwinConfigurations = {
