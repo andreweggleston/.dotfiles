@@ -1,11 +1,21 @@
-{ config, lib, pkgs, inputs, outputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  outputs,
+  ...
+}:
 
 {
-  imports =
-    [ 
-      ../../minimal.nix
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    ../../minimal.nix
+    ./hardware-configuration.nix
+
+    ./deluge.nix
+    ./vpn.nix
+    ./arr.nix
+  ];
 
   home-manager.users.andreweggleston = import ../../../home-manager/andreweggleston/hosts/nascar.nix;
 
@@ -16,7 +26,10 @@
     efiSupport = true;
     efiInstallAsRemovable = true;
     mirroredBoots = [
-      { devices = [ "nodev"]; path = "/boot"; }
+      {
+        devices = [ "nodev" ];
+        path = "/boot";
+      }
     ];
   };
   boot.zfs.extraPools = [ "tank" ];
@@ -26,14 +39,16 @@
     hostName = "nascar"; # Define your hostname.
     hostId = "87c61ef6";
     networkmanager.enable = true;
+    firewall.enable = false;
   };
 
   # unneeded when auto timesync is on
   # time.timeZone = "America/New_York";
 
   environment.systemPackages = with pkgs; [
-    vim 
-    wget
+    smartmontools
+    ipmitool
+    ipmicfg
   ];
 
   # Distributed builds
@@ -53,8 +68,7 @@
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
-  system.copySystemConfiguration = true;
+  #  system.copySystemConfiguration = true;
 
   system.stateVersion = "25.05";
 }
-
