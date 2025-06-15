@@ -2,7 +2,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   programs.git = {
     enable = true;
     userName = "Andrew Eggleston";
@@ -34,11 +35,6 @@
 
     extraConfig = {
       init.defaultBranch = "main";
-    };
-
-    difftastic = {
-      enable = true;
-      background = "${config.colorScheme.variant}";
     };
   };
 }
