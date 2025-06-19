@@ -128,7 +128,7 @@ in
   ];
 
   services.ulogd = {
-    enable = true;
+    enable = false;
     logLevel = 1;
     settings = {
       pgsql1 = {
