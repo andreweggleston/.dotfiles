@@ -36,7 +36,7 @@ in
     pkgs.unstable.alacritty
   ];
 
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   programs.fish.enable = true;
   programs.fish.shellInit = ''
@@ -46,7 +46,6 @@ in
   environment.shells = builtins.attrValues { inherit (pkgs) bashInteractive zsh fish; };
 
   # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
   nix.package = pkgs.nix;
   nix.extraOptions =
     ''
