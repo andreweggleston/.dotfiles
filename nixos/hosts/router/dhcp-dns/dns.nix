@@ -117,10 +117,17 @@ in
       ipv4Only = true;
     };
   };
-  systemd.services.bind.preStart = ''
-    mkdir -p /var/named/zones
-    cp ${home-zoneFile} /var/named/zones/peckave.home.arpa.zone
-    chown named:named -R /var/named/zones
-    chmod 0644 /var/named/zones/peckave.home.arpa.zone
-  '';
+
+  systemd.services.bind.serviceConfig = {
+    ReadWritePaths = [ "/var/named" ];
+  };
+
+  system.activationScripts.copyZoneFile = {
+    text = ''
+      mkdir -p /var/named/zones
+      cp ${home-zoneFile} /var/named/zones/peckave.home.arpa.zone
+      chown named:named -R /var/named/zones
+      chmod 0644 /var/named/zones/peckave.home.arpa.zone
+    '';
+  };
 }
