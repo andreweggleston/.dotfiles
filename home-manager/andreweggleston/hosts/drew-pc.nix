@@ -5,11 +5,17 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   imports = [
     ../global
     ../features/desktop/common
     ../features/desktop/common/discord.nix
     ../features/desktop/music-production.nix
+  ];
+
+  home.packages = [
+    pkgs.remmina
+    pkgs.parsec-bin
   ];
 }
