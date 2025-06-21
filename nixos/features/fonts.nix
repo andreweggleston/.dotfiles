@@ -25,7 +25,7 @@
         "Joypixels"
       ];
       sansSerif = [
-        "SF Pro Display"
+        "Noto Sans"
         "Joypixels"
       ];
       monospace = [ "FiraCode Nerd Font Mono" ];
