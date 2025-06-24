@@ -18,6 +18,21 @@ in
     map mkUdevInterfaceNameRule interfaces.renames
   );
   networking = {
+    bonds = {
+      "${interfaces.bond.name}" = {
+        interfaces = [
+          "lan0"
+          "lan1"
+          "lan2"
+          "lan3"
+        ]; # TODO: don't hardcode interface names
+        driverOptions = {
+          mode = "802.3ad"; # Use LACP for link aggregation
+          miimon = "100"; # Link monitoring interval (ms)
+        };
+      };
+    };
+
     interfaces = {
       # get address from isp
       "${interfaces.wan.name}" = {

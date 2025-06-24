@@ -68,7 +68,7 @@ let
   interfaces = {
     renames = secrets.hosts.router.interfaces;
     lan = {
-      name = "lan0";
+      name = "bond0";
     };
     bond = {
       name = "bond0";
