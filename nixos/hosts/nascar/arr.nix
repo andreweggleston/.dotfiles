@@ -34,6 +34,10 @@
     ];
   };
 
+  environment.systemPackages = [
+    pkgs.intel-gpu-tools
+  ];
+
   boot.kernelParams = [
     "i915.enable_guc=2"
     "i915.disable_display=1"
