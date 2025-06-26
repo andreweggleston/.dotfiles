@@ -10,8 +10,20 @@ let
   lan6 = secrets.hosts.router.networks.lan.base6;
   vpn4 = secrets.hosts.router.networks.vpn.base4;
   vpn6 = secrets.hosts.router.networks.vpn.base6;
+  dmz4 = secrets.hosts.router.networks.dmz.base4;
   vpnPort = secrets.hosts.router.networks.vpn.port;
   addresses = {
+    dmz = {
+      ipv4 = {
+        base = dmz4;
+        addr = "${dmz4}.1";
+        subnet = "${dmz4}.0/24";
+        dhcpRange = {
+          low = "${dmz4}.50";
+          high = "${dmz4}.254";
+        };
+      };
+    };
     vpn = {
       ipv4 = {
         base = vpn4;
@@ -68,7 +80,10 @@ let
   interfaces = {
     renames = secrets.hosts.router.interfaces;
     lan = {
-      name = "bond0";
+      name = "bond0.1";
+    };
+    dmz = {
+      name = "bond0.2";
     };
     bond = {
       name = "bond0";

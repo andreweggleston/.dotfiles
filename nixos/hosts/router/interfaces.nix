@@ -33,6 +33,17 @@ in
       };
     };
 
+    vlans = {
+      "${interfaces.lan.name}" = {
+        id = 1;
+        interface = interfaces.bond.name;
+      };
+      "${interfaces.dmz.name}" = {
+        id = 2;
+        interface = interfaces.bond.name;
+      };
+    };
+
     interfaces = {
       # get address from isp
       "${interfaces.wan.name}" = {
@@ -50,6 +61,15 @@ in
           {
             address = addresses.lan.ipv6.addr;
             prefixLength = 64;
+          }
+        ];
+      };
+
+      "${interfaces.dmz.name}" = {
+        ipv4.addresses = [
+          {
+            address = addresses.dmz.ipv4.addr;
+            prefixLength = 24;
           }
         ];
       };

@@ -4,7 +4,8 @@
   pkgs,
   modulesPath,
   ...
-}: {
+}:
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
@@ -15,11 +16,17 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    kernelModules = ["kvm-intel"];
-    extraModulePackages = [];
+    kernelModules = [ "kvm-intel" ];
+    extraModulePackages = [ ];
     initrd = {
-      availableKernelModules = ["xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod"];
-      kernelModules = [];
+      availableKernelModules = [
+        "xhci_pci"
+        "ahci"
+        "usb_storage"
+        "usbhid"
+        "sd_mod"
+      ];
+      kernelModules = [ ];
     };
     kernel.sysctl = {
       # enable packet forwarding
@@ -27,7 +34,7 @@
       "net.ipv6.conf.all.forwarding" = true;
       # block martian packets
       "net.ipv4.conf.default.rp_filter" = 1;
-      "net.ipv4.conf.lan0.rp_filter" = 1;
+      "net.ipv4.conf.bond0.rp_filter" = 1;
       "net.ipv4.conf.wan0.rp_filter" = 1;
       # ipv6 autoconfig on wan0
       "net.ipv6.conf.wan0.accept_ra" = 2;
@@ -47,10 +54,13 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/1076-F1D4";
     fsType = "vfat";
-    options = ["fmask=0077" "dmask=0077"];
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
   };
 
-  swapDevices = [];
+  swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

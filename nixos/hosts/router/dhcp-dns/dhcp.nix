@@ -10,7 +10,10 @@
         enable = true;
         settings = {
           interfaces-config = {
-            interfaces = [ interfaces.lan.name ];
+            interfaces = [
+              interfaces.lan.name
+              interfaces.dmz.name
+            ];
           };
           lease-database = {
             name = "/var/lib/kea/dhcp4.leases";
@@ -18,12 +21,6 @@
             type = "memfile";
           };
           valid-lifetime = 28800;
-          option-data = [
-            {
-              name = "domain-name-servers";
-              data = addresses.lan.ipv4.addr;
-            }
-          ];
           dhcp-ddns = {
             enable-updates = true;
             server-ip = "127.0.0.1";
@@ -33,12 +30,13 @@
           subnet4 = [
             {
               id = 1;
+              interface = interfaces.lan.name;
+              subnet = addresses.lan.ipv4.subnet;
               ddns-qualifying-suffix = "peckave.home.arpa";
               ddns-send-updates = true;
               ddns-override-client-update = true;
               ddns-override-no-update = true;
               ddns-update-on-renew = true;
-              subnet = addresses.lan.ipv4.subnet;
               pools = [
                 {
                   pool = "${addresses.lan.ipv4.dhcpRange.low} - ${addresses.lan.ipv4.dhcpRange.high}";
@@ -52,6 +50,10 @@
                 {
                   name = "domain-search";
                   data = "peckave.home.arpa";
+                }
+                {
+                  name = "domain-name-servers";
+                  data = addresses.lan.ipv4.addr;
                 }
               ];
               reservations = map (
@@ -67,6 +69,36 @@
                   ip-address = addr4;
                 }
               ) addresses.clients;
+            }
+
+            {
+              id = 2;
+              interface = interfaces.dmz.name;
+              subnet = addresses.dmz.ipv4.subnet;
+              ddns-qualifying-suffix = "peckdmz.home.arpa";
+              ddns-send-updates = true;
+              ddns-override-client-update = true;
+              ddns-override-no-update = true;
+              ddns-update-on-renew = true;
+              pools = [
+                {
+                  pool = "${addresses.dmz.ipv4.dhcpRange.low} - ${addresses.dmz.ipv4.dhcpRange.high}";
+                }
+              ];
+              option-data = [
+                {
+                  name = "routers";
+                  data = addresses.dmz.ipv4.addr;
+                }
+                {
+                  name = "domain-search";
+                  data = "peckdmz.home.arpa";
+                }
+                {
+                  name = "domain-name-servers";
+                  data = addresses.dmz.ipv4.addr;
+                }
+              ];
             }
           ];
         };

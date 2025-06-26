@@ -10,6 +10,20 @@ let
   utils = import ./utils.nix { inherit lib; };
   inherit (utils) subnet4ToReverseDomain;
   inherit (utils) subnet6ToReverseDomain;
+  dmz-zoneFile = pkgs.writeText "peckdmz.home.arpa.zone" ''
+    $TTL 2d
+    @       IN    SOA     router.peckdmz.home.arpa. admin.peckdmz.home.arpa (
+                          2024082501  ; Serial
+                          3600        ; Refresh
+                          1800        ; Retry
+                          1209600     ; Expire
+                          172800      ; Minimum TTL
+                          )
+
+            IN    NS      router.peckdmz.home.arpa.
+
+    router  IN    A       ${addresses.dmz.ipv4.addr}
+  '';
   home-zoneFile = pkgs.writeText "peckave.home.arpa.zone" ''
     $TTL 2d
     @       IN    SOA     router.peckave.home.arpa. admin.peckave.home.arpa (
@@ -73,6 +87,7 @@ let
 
       ${addresses.lan.ipv4.subnet};
       ${addresses.vpn.ipv4.subnet};
+      ${addresses.dmz.ipv4.subnet};
 
       ${addresses.lan.ipv6.subnet};
       ${addresses.vpn.ipv6.subnet};
@@ -94,12 +109,18 @@ let
       directory "/run/named";
       allow-query { homenets; };
       recursion yes;
-      listen-on { 127.0.0.0/8; ${addresses.lan.ipv4.subnet}; ${addresses.vpn.ipv4.subnet}; };
+      listen-on { 127.0.0.0/8; ${addresses.lan.ipv4.subnet}; ${addresses.vpn.ipv4.subnet}; ${addresses.dmz.ipv4.subnet}; };
     };
 
     zone "peckave.home.arpa" IN {
       type master;
       file "/var/named/zones/peckave.home.arpa.zone";
+      allow-update { key "router-ddns"; };
+    };
+
+    zone "peckdmz.home.arpa" IN {
+      type master;
+      file "/var/named/zones/peckdmz.home.arpa.zone";
       allow-update { key "router-ddns"; };
     };
 
@@ -126,8 +147,10 @@ in
     text = ''
       mkdir -p /var/named/zones
       cp ${home-zoneFile} /var/named/zones/peckave.home.arpa.zone
+      cp ${dmz-zoneFile} /var/named/zones/peckdmz.home.arpa.zone
       chown named:named -R /var/named/zones
       chmod 0644 /var/named/zones/peckave.home.arpa.zone
+      chmod 0644 /var/named/zones/peckdmz.home.arpa.zone
     '';
   };
 }
