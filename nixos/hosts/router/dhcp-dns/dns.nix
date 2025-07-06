@@ -87,10 +87,16 @@ let
 
       ${addresses.lan.ipv4.subnet};
       ${addresses.vpn.ipv4.subnet};
-      ${addresses.dmz.ipv4.subnet};
 
       ${addresses.lan.ipv6.subnet};
       ${addresses.vpn.ipv6.subnet};
+    };
+
+    acl dmznets {
+      127.0.0.0/24;
+      ::1/128;
+
+      ${addresses.dmz.ipv4.subnet};
     };
 
     # keys
@@ -107,7 +113,6 @@ let
 
     options {
       directory "/run/named";
-      allow-query { homenets; };
       recursion yes;
       listen-on { 127.0.0.0/8; ${addresses.lan.ipv4.subnet}; ${addresses.vpn.ipv4.subnet}; ${addresses.dmz.ipv4.subnet}; };
     };
@@ -115,12 +120,14 @@ let
     zone "peckave.home.arpa" IN {
       type master;
       file "/var/named/zones/peckave.home.arpa.zone";
+      allow-query { homenets; };
       allow-update { key "router-ddns"; };
     };
 
     zone "peckdmz.home.arpa" IN {
       type master;
       file "/var/named/zones/peckdmz.home.arpa.zone";
+      allow-query { homenets; dmznets; };
       allow-update { key "router-ddns"; };
     };
 

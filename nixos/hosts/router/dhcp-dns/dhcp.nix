@@ -87,10 +87,6 @@
               ];
               option-data = [
                 {
-                  name = "routers";
-                  data = addresses.dmz.ipv4.addr;
-                }
-                {
                   name = "domain-search";
                   data = "peckdmz.home.arpa";
                 }
