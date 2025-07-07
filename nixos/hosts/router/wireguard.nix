@@ -10,6 +10,12 @@ let
   nft = pkgs.nftables;
 in
 {
+  systemd.services."wireguard-${interfaces.vpn.name}" = {
+    partOf = [ "nftables.service" ];
+    after = [
+      "nftables.service"
+    ];
+  };
   networking.wireguard.interfaces = {
     "${interfaces.vpn.name}" = {
       postSetup = ''
@@ -37,7 +43,6 @@ in
       postShutdown = ''
         # inverse of postSetup -- remove all rules added AND NOTHING MORE
         # could do nothing... or just restart nftables service...?
-        systemctl restart nftables
       '';
 
       ips = [
