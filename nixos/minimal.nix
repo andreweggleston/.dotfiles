@@ -23,6 +23,7 @@
   programs.fish.enable = true;
 
   services.openssh.enable = true;
+  programs.mosh.enable = true;
 
   nixpkgs = {
     overlays = [

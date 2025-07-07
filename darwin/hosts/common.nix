@@ -34,6 +34,7 @@ in
     pkgs.fish
     pkgs.rustup
     pkgs.unstable.alacritty
+    pkgs.mosh
   ];
 
   security.pam.services.sudo_local.touchIdAuth = true;
