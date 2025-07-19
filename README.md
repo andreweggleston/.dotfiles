@@ -24,15 +24,15 @@ If you don't have `just` installed but do have nix, run `nix develop` to open a 
 * Remove albert as a dependency--it takes a long time to compile when version changes on the arm macbook, and there are simpler alternatives available (rofi/wofi)
 
 ### Router:
-* DHCP/DNS High-Availability
-* remote builds:
-    * probably should pin kernel / nixpkgs version
 * fix http over vpn?? -- only doesnt work for RAX80 access point...likely an issue with the RAX80 but can do packet analysis
 * investigate ipv6 more--test-ipv6.com still fails
-* Set up different vlans for regular clients and services -- keep mastodon traffic from clients
-    * home switch supports 802.1q vlans, as does proxmox host
-* 803.1ad/802.1ax Link Aggregation -- I can "trunk" up to 4 ports on my switch -- should make a "router-bonding" branch
 * reverse proxy services? might be on router or on whichever box becomes the new dns server--likely lepotato
+* ~~Set up different vlans for regular clients and services -- keep mastodon traffic from clients~~
+    * **Need to set up routing rules**, DNS is working
+* DHCP/DNS High-Availability
+* ~~remote builds:~~
+    * ~~probably should pin kernel / nixpkgs version~~
+* ~~803.1ad/802.1ax Link Aggregation -- I can "trunk" up to 4 ports on my switch -- should make a "router-bonding" branch~~
 * ~~on reboot, nftables fails to come up because it depends on the wireguard interface existing. 2 options for solutions:~~
     * ~~Have the wireguard systemd unit automatically add/remove nftables rules on start/stop (this is how wireguard usually works with iptables). networking.wireguard.interfaces.<name>.{preSetup, postSetup, postShutdown} are list of commands concatenated by `\n`--which means I can add/remove the vpn-specific nftables rules using the `nft` command. Here's what I would have to do:~~
         * ~~Have the wireguard service create its own ingress chain instead of referencing the wireguard interface in the original ingress chain.~~
@@ -47,5 +47,5 @@ If you don't have `just` installed but do have nix, run `nix develop` to open a 
 
 
 ### lepotato:
-* set up remote builds (on nix-devbox)
+* set up remote builds ()
 * DHCP/DNS High-Availability 
