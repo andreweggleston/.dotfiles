@@ -39,7 +39,7 @@
       wireguard-tools
       dig
       ;
-    neovim = inputs.nixvim.packages.${pkgs.system}.default;
+    neovim = inputs.neovim.packages.${pkgs.system}.default;
   };
 
   programs = {
