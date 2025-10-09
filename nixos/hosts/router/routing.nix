@@ -81,7 +81,7 @@
             ip6 saddr ${addresses.lan.ipv6.subnet} oifname ${interfaces.wan.name} drop
             
             # log outbound connections
-            ip saddr 192.168.3.0/24 oifname wan0 ct state new log prefix "NFT_FORWARD_NEW_CONN: " group 1 limit rate 5/second
+            ip saddr ${addresses.lan.ipv4.subnet} oifname wan0 ct state new log prefix "NFT_FORWARD_NEW_CONN: " group 1 limit rate 5/second
 
             ct state vmap { established : accept, related : accept, invalid : drop }
 

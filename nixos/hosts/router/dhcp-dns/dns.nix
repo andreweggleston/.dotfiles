@@ -13,7 +13,7 @@ let
   dmz-zoneFile = pkgs.writeText "peckdmz.home.arpa.zone" ''
     $TTL 2d
     @       IN    SOA     router.peckdmz.home.arpa. admin.peckdmz.home.arpa (
-                          2024082501  ; Serial
+                          2025092101  ; Serial
                           3600        ; Refresh
                           1800        ; Retry
                           1209600     ; Expire
@@ -24,20 +24,38 @@ let
 
     router  IN    A       ${addresses.dmz.ipv4.addr}
   '';
-  home-zoneFile = pkgs.writeText "peckave.home.arpa.zone" ''
+  home-zoneFile = pkgs.writeText "${secrets.internal_domain}.zone" ''
     $TTL 2d
-    @       IN    SOA     router.peckave.home.arpa. admin.peckave.home.arpa (
-                          2024082501  ; Serial
+    @       IN    SOA     router.${secrets.internal_domain}. admin.${secrets.internal_domain} (
+                          2025092501  ; Serial
                           3600        ; Refresh
                           1800        ; Retry
                           1209600     ; Expire
                           172800      ; Minimum TTL
                           )
 
-            IN    NS      router.peckave.home.arpa.
+            IN    NS      router.${secrets.internal_domain}.
 
     router  IN    A       ${addresses.lan.ipv4.addr}
     router  IN    AAAA    ${addresses.lan.ipv6.addr}
+    *.${secrets.internal_domain}.             IN    A   ${addresses.lan.ipv4.addr}
+  '';
+  internal-zoneFile = pkgs.writeText "internal.${secrets.external_domain}.zone" ''
+    $TTL 2d
+    @       IN    SOA     router.internal.${secrets.external_domain}. admin.internal.${secrets.external_domain} (
+                          2025092501  ; Serial
+                          3600        ; Refresh
+                          1800        ; Retry
+                          1209600     ; Expire
+                          172800      ; Minimum TTL
+                          )
+
+            IN    NS      router.internal.${secrets.external_domain}.
+
+    router  IN    A       ${addresses.lan.ipv4.addr}
+    router  IN    AAAA    ${addresses.lan.ipv6.addr}
+    *.internal.${secrets.external_domain}.    IN    A   ${addresses.lan.ipv4.addr}
+  
   '';
   root-hintFile = pkgs.writeText "root.hints" ''
     .                        3600000      NS    A.ROOT-SERVERS.NET.
@@ -117,11 +135,17 @@ let
       listen-on { 127.0.0.0/8; ${addresses.lan.ipv4.subnet}; ${addresses.vpn.ipv4.subnet}; ${addresses.dmz.ipv4.subnet}; };
     };
 
-    zone "peckave.home.arpa" IN {
+    zone "${secrets.internal_domain}" IN {
       type master;
-      file "/var/named/zones/peckave.home.arpa.zone";
+      file "/var/named/zones/${secrets.internal_domain}.zone";
       allow-query { homenets; };
       allow-update { key "router-ddns"; };
+    };
+
+    zone "internal.${secrets.external_domain}" IN {
+      type master;
+      file "/var/named/zones/internal.${secrets.external_domain}.zone";
+      allow-query { homenets; };
     };
 
     zone "peckdmz.home.arpa" IN {
@@ -153,11 +177,13 @@ in
   system.activationScripts.copyZoneFile = {
     text = ''
       mkdir -p /var/named/zones
-      cp ${home-zoneFile} /var/named/zones/peckave.home.arpa.zone
+      cp ${home-zoneFile} /var/named/zones/${secrets.internal_domain}.zone
       cp ${dmz-zoneFile} /var/named/zones/peckdmz.home.arpa.zone
+      cp ${internal-zoneFile} /var/named/zones/internal.${secrets.external_domain}.zone
       chown named:named -R /var/named/zones
-      chmod 0644 /var/named/zones/peckave.home.arpa.zone
+      chmod 0644 /var/named/zones/${secrets.internal_domain}.zone
       chmod 0644 /var/named/zones/peckdmz.home.arpa.zone
+      chmod 0644 /var/named/zones/internal.${secrets.external_domain}.zone
     '';
   };
 }

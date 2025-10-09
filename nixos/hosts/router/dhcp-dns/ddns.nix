@@ -21,7 +21,7 @@ in
         forward-ddns = {
           ddns-domains = [
             {
-              name = "peckave.home.arpa.";
+              name = "${secrets.internal_domain}.";
               key-name = "router-ddns";
               dns-servers = [
                 {

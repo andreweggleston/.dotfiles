@@ -10,6 +10,7 @@
     (import ./dhcp.nix {
       inherit addresses;
       inherit interfaces;
+      inherit secrets;
     })
     (import ./ddns.nix {
       inherit addresses;

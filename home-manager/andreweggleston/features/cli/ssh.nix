@@ -21,10 +21,6 @@
         hostname = "mercury.cs.uml.edu";
         user = "aegglest";
       };
-      kilpisjarvi = {
-        hostname = "kilpisjarvi.peckave.home.arpa";
-        user = "root";
-      };
     };
   };
 }

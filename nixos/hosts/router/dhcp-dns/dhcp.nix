@@ -1,6 +1,7 @@
 {
   addresses,
   interfaces,
+  secrets,
   ...
 }:
 {
@@ -32,7 +33,7 @@
               id = 1;
               interface = interfaces.lan.name;
               subnet = addresses.lan.ipv4.subnet;
-              ddns-qualifying-suffix = "peckave.home.arpa";
+              ddns-qualifying-suffix = "${secrets.internal_domain}";
               ddns-send-updates = true;
               ddns-override-client-update = true;
               ddns-override-no-update = true;
@@ -49,7 +50,7 @@
                 }
                 {
                   name = "domain-search";
-                  data = "peckave.home.arpa";
+                  data = "${secrets.internal_domain}";
                 }
                 {
                   name = "domain-name-servers";
@@ -126,7 +127,7 @@
           subnet6 = [
             {
               id = 1;
-              ddns-qualifying-suffix = "peckave.home.arpa";
+              ddns-qualifying-suffix = "${secrets.internal_domain}";
               ddns-send-updates = true;
               ddns-override-client-update = true;
               ddns-override-no-update = true;
@@ -140,7 +141,7 @@
               option-data = [
                 {
                   name = "domain-search";
-                  data = "peckave.home.arpa";
+                  data = "${secrets.internal_domain}";
                 }
               ];
               reservations = map (

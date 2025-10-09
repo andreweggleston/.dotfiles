@@ -12,6 +12,28 @@ let
   vpn6 = secrets.hosts.router.networks.vpn.base6;
   dmz4 = secrets.hosts.router.networks.dmz.base4;
   vpnPort = secrets.hosts.router.networks.vpn.port;
+  services = [
+    {
+      name = "jellyfin";
+      host = "nascar";
+      port = "8096";
+    }
+    {
+      name = "radarr";
+      host = "nascar";
+      port = "7878";
+    }
+    {
+      name = "sonarr";
+      host = "nascar";
+      port = "8989";
+    }
+    {
+      name = "deluge";
+      host = "nascar";
+      port = "8112";
+    }
+  ];
   addresses = {
     dmz = {
       ipv4 = {
@@ -109,6 +131,14 @@ in
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    (import ./reverse-proxy.nix {
+      inherit addresses;
+      inherit interfaces;
+      inherit services;
+      inherit pkgs;
+      inherit secrets;
+      inherit lib;
+    })
     (import ./interfaces.nix {
       inherit addresses;
       inherit interfaces;
@@ -173,7 +203,7 @@ in
       "127.0.0.2" = lib.mkForce [ ];
       ${addresses.lan.ipv4.addr} = [
         "router"
-        "router.peckave.home.arpa"
+        "router.${secrets.internal_domain}"
       ]; # for some reason /etc/hosts has an entry "127.0.0.2 router" and no that 2 is not a typo
     };
   };
@@ -192,7 +222,7 @@ in
         system = "x86_64-linux";
         sshUser = "andreweggleston";
         sshKey = "/home/andreweggleston/.ssh/id_ed25519";
-        hostName = "kilpisjarvi.peckave.home.arpa";
+        hostName = "kilpisjarvi.${secrets.internal_domain}";
       }
     ];
     settings.trusted-users = [ "andreweggleston" ];

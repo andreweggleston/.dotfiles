@@ -59,7 +59,7 @@
         system = "x86_64-linux";
         sshUser = "andreweggleston";
         sshKey = "/home/andreweggleston/.ssh/id_ed25519";
-        hostName = "kilpisjarvi.peckave.home.arpa";
+        hostName = "kilpisjarvi.${secrets.internal_domain}";
       }
     ];
     settings.trusted-users = [ "andreweggleston" ];
