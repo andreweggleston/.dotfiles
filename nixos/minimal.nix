@@ -25,6 +25,11 @@
   services.openssh.enable = true;
   programs.mosh.enable = true;
 
+  environment.systemPackages = [
+    pkgs.man-pages
+    pkgs.man-pages-posix
+  ];
+
   nixpkgs = {
     overlays = [
       outputs.overlays.additions
