@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   virtualisation.containers.enable = true;
   virtualisation = {
@@ -9,4 +9,9 @@
     };
   };
   users.groups.podman.members = [ "andreweggleston" ];
+
+  environment.systemPackages = [
+    pkgs.qemu_kvm
+    pkgs.virtiofsd
+  ];
 }
