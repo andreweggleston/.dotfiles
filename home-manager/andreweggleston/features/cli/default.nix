@@ -13,6 +13,7 @@
     ./npm.nix
     ./ssh.nix
     ./tmux.nix
+    ./neovim.nix
   ];
 
   home.packages = builtins.attrValues {
@@ -39,7 +40,6 @@
       wireguard-tools
       dig
       ;
-    neovim = inputs.neovim.packages.${pkgs.system}.default;
   };
 
   programs = {

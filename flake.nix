@@ -1,6 +1,7 @@
 {
   description = "Your new nix config";
 
+  inputs.self.submodules = true;
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
@@ -18,11 +19,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # nixos-wsl = {
-    #   url = "github:nix-community/NixOS-WSL";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-
     apple-silicon.url = "github:tpwrules/nixos-apple-silicon";
     apple-silicon.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -33,10 +29,9 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
-    # My personal nixvim config
     neovim = {
-      url = "github:andreweggleston/nvim";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "git+file:home-manager/andreweggleston/features/cli/nvim";
+      flake = false;
     };
 
     nur.url = "github:nix-community/nur";

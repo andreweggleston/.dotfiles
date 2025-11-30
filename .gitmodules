@@ -1,0 +1,3 @@
+[submodule "home-manager/andreweggleston/features/cli/nvim"]
+	path = home-manager/andreweggleston/features/cli/nvim
+	url = https://github.com/andreweggeston/nvim
