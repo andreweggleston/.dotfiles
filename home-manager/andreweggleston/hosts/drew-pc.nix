@@ -17,5 +17,7 @@
   home.packages = [
     pkgs.remmina
     pkgs.parsec-bin
+    pkgs.prismlauncher
+    pkgs.temurin-bin
   ];
 }
