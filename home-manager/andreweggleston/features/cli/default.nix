@@ -39,6 +39,7 @@
       git-crypt
       wireguard-tools
       dig
+      claude-code
       ;
   };
 
