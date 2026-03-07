@@ -1,4 +1,4 @@
-[submodule "home-manager/andreweggleston/features/cli/nvim"]
+[submodule "nvim"]
 	path = home-manager/andreweggleston/features/cli/nvim
-	url = git@github.com:andreweggleston/nvim
+	url = git@github.com:andreweggleston/nvim.git
 	branch = main
