@@ -43,8 +43,8 @@
       open = false;
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
-        version = "580.95.05";
-        sha256_64bit = "sha256-hJ7w746EK5gGss3p8RwTA9VPGpp2lGfk5dlhsv4Rgqc=";
+        version = "580.119.02";
+        sha256_64bit = "sha256-gCD139PuiK7no4mQ0MPSr+VHUemhcLqerdfqZwE47Nc=";
         openSha256 = "sha256-DuVNA63+pJ8IB7Tw2gM4HbwlOh1bcDg2AN2mbEU9VPE=";
         settingsSha256 = "sha256-VcCa3P/v3tDRzDgaY+hLrQSwswvNhsm93anmOhUymvM=";
         usePersistenced = false;
@@ -53,7 +53,7 @@
     graphics = {
       enable = true;
       extraPackages = with pkgs; [
-        vaapiVdpau
+        libva-vdpau-driver
         nvidia-vaapi-driver
       ];
     };
@@ -70,6 +70,13 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+
+  networking.firewall.allowedTCPPorts = [
+    25565
+  ];
+  networking.firewall.allowedUDPPorts = [
+    25565
+  ];
 
   # Set your time zone. Unnecessary if automatic-timezoned is enabled
   # time.timeZone = "America/New_York";
