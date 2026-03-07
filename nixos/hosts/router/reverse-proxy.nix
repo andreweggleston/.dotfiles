@@ -9,7 +9,7 @@
 let
   caddypkg = pkgs.caddy.withPlugins {
     plugins = [ "github.com/caddy-dns/porkbun@v0.3.1" ];
-    hash = "sha256-s1N/csCCP2O/0buCf064R/WVwuR4qpF25pIJBBTbFYg=";
+    hash = "sha256-R1ZqQ8drcBQIH7cLq9kEvdg9Ze3bKkT8IAFavldVeC0=";
   };
 in
 {
