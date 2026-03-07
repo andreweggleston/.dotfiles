@@ -2,7 +2,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   programs.neovim.enable = true;
   programs.neovim.plugins = [
     pkgs.vimPlugins.nvim-treesitter.withAllGrammars
@@ -28,6 +29,7 @@
     pkgs.nodejs_24
     pkgs.nodePackages_latest.vscode-json-languageserver
     pkgs.fzf
+    pkgs.lazygit
     pkgs.lua-language-server
     pkgs.luajitPackages.jsregexp
     pkgs.nixd
@@ -56,6 +58,7 @@
     ".config/nvim" = {
       source = ./nvim;
       recursive = true;
+      force = true;
     };
   };
 }
