@@ -2,6 +2,7 @@
 {
   programs.ssh = {
     enable = true;
+    enableDefaultConfig = false;
     extraConfig = ''
       AddKeysToAgent=yes
     '';
@@ -12,6 +13,10 @@
       #   hostname = {hostname};
       #   user = {user};
       # };
+
+      "*" = {
+
+      };
 
       uml = {
         hostname = "cs.uml.edu";
