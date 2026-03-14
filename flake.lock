@@ -216,15 +216,16 @@
     "neovim": {
       "flake": false,
       "locked": {
-        "lastModified": 1762293209,
-        "narHash": "sha256-6BYB+jzrZlP9Ug/mT6Xb7XNBGd00tTTKbldQJO52jZQ=",
-        "ref": "refs/heads/main",
-        "rev": "7ca8dd186634a348c87c16bdf1d5bb97d10d133c",
-        "revCount": 56,
+        "lastModified": 1773509776,
+        "narHash": "sha256-zh3ZGn7x4FFhW7cNxHSNugT6T4n7x0FHGesqFjZ7LpQ=",
+        "rev": "b83400d84c429a0783aea702a5f94cfb636efd70",
+        "revCount": 60,
+        "submodules": true,
         "type": "git",
         "url": "file:home-manager/andreweggleston/features/cli/nvim"
       },
       "original": {
+        "submodules": true,
         "type": "git",
         "url": "file:home-manager/andreweggleston/features/cli/nvim"
       }
