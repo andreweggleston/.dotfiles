@@ -30,7 +30,7 @@
     };
 
     neovim = {
-      url = "git+file:home-manager/andreweggleston/features/cli/nvim";
+      url = "git+file:home-manager/andreweggleston/features/cli/nvim?submodules=1";
       flake = false;
     };
 
