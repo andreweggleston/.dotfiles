@@ -213,23 +213,6 @@
         "type": "github"
       }
     },
-    "neovim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1773509776,
-        "narHash": "sha256-zh3ZGn7x4FFhW7cNxHSNugT6T4n7x0FHGesqFjZ7LpQ=",
-        "rev": "b83400d84c429a0783aea702a5f94cfb636efd70",
-        "revCount": 60,
-        "submodules": true,
-        "type": "git",
-        "url": "file:home-manager/andreweggleston/features/cli/nvim"
-      },
-      "original": {
-        "submodules": true,
-        "type": "git",
-        "url": "file:home-manager/andreweggleston/features/cli/nvim"
-      }
-    },
     "nix-colors": {
       "inputs": {
         "base16-schemes": "base16-schemes",
@@ -437,7 +420,6 @@
         "darwin": "darwin",
         "firefox-addons": "firefox-addons",
         "home-manager": "home-manager",
-        "neovim": "neovim",
         "nix-colors": "nix-colors",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",

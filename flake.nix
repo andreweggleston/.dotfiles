@@ -29,11 +29,6 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
-    neovim = {
-      url = "git+file:home-manager/andreweggleston/features/cli/nvim?submodules=1";
-      flake = false;
-    };
-
     nur.url = "github:nix-community/nur";
 
     firefox-addons.url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
