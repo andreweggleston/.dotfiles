@@ -1,0 +1,12 @@
+{
+  extras: [
+    lazyvim.plugins.extra.lang.clangd,
+    lazyvim.plugins.extra.lang.cmake,
+    lazyvim.plugins.extra.lang.json,
+    lazyvim.plugins.extra.lang.markdown,
+    lazyvim.plugins.extra.lang.python,
+    lazyvim.plugins.extra.lang.rust,
+    lazyvim.plugins.extra.lang.toml
+  ],
+  version: 7
+}
