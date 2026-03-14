@@ -15,6 +15,8 @@
     ./deluge.nix
     ./vpn.nix
     ./arr.nix
+
+    ./samba.nix
   ];
 
   home-manager.users.andreweggleston = import ../../../home-manager/andreweggleston/hosts/nascar.nix;
