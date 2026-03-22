@@ -56,6 +56,40 @@ return { -- LSP keymaps
         -- LSP Server Settings
         ---@type lspconfig.options
         servers = {
+          ["*"] = {
+            {
+              "gd",
+              "<cmd>FzfLua lsp_definitions jump_to_single_result=true ignore_current_line=true<cr>",
+              desc = "Goto Definition",
+              has = "definition",
+            },
+            { "<leader>ca", false },
+            { "<leader>cc", false },
+            { "<leader>cC", false },
+            { "<leader>cR", false },
+            { "<leader>cr", false },
+            { "<leader>cA", false },
+            { "<leader>cl", false },
+            { "<leader>Ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "v" }, has = "codeAction" },
+            { "<leader>Cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "v" }, has = "codeLens" },
+            {
+              "<leader>CC",
+              vim.lsp.codelens.refresh,
+              desc = "Refresh & Display Codelens",
+              mode = { "n" },
+              has = "codeLens",
+            },
+            {
+              "<leader>CR",
+              Snacks.rename.rename_file,
+              desc = "Rename File",
+              mode = { "n" },
+              has = { "workspace/didRenameFiles", "workspace/willRenameFiles" },
+            },
+            { "<leader>Cr", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
+            { "<leader>CA", LazyVim.lsp.action.source, desc = "Source Action", has = "codeAction" },
+            { "<leader>Cl", LazyVim.lsp.action.source, desc = "Source Action", has = "codeAction" },
+          },
           pyright = {},
           lua_ls = {
             -- mason = false, -- set to false if you don't want this server to be installed with mason
@@ -103,44 +137,6 @@ return { -- LSP keymaps
         },
       }
 
-      local keys = require("lazyvim.plugins.lsp.keymaps").get()
-      -- change a keymap
-      keys[#keys + 1] = {
-        "gd",
-        "<cmd>FzfLua lsp_definitions jump_to_single_result=true ignore_current_line=true<cr>",
-        desc = "Goto Definition",
-        has = "definition",
-      }
-      -- disable a keymap
-      keys[#keys + 1] = { "<leader>ca", false }
-      keys[#keys + 1] = { "<leader>cc", false }
-      keys[#keys + 1] = { "<leader>cC", false }
-      keys[#keys + 1] = { "<leader>cR", false }
-      keys[#keys + 1] = { "<leader>cr", false }
-      keys[#keys + 1] = { "<leader>cA", false }
-      keys[#keys + 1] = { "<leader>cl", false }
-      -- add a keymap
-      keys[#keys + 1] =
-        { "<leader>Ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "v" }, has = "codeAction" }
-      keys[#keys + 1] =
-        { "<leader>Cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "v" }, has = "codeLens" }
-      keys[#keys + 1] = {
-        "<leader>CC",
-        vim.lsp.codelens.refresh,
-        desc = "Refresh & Display Codelens",
-        mode = { "n" },
-        has = "codeLens",
-      }
-      keys[#keys + 1] = {
-        "<leader>CR",
-        Snacks.rename.rename_file,
-        desc = "Rename File",
-        mode = { "n" },
-        has = { "workspace/didRenameFiles", "workspace/willRenameFiles" },
-      }
-      keys[#keys + 1] = { "<leader>Cr", vim.lsp.buf.rename, desc = "Rename", has = "rename" }
-      keys[#keys + 1] = { "<leader>CA", LazyVim.lsp.action.source, desc = "Source Action", has = "codeAction" }
-      keys[#keys + 1] = { "<leader>Cl", LazyVim.lsp.action.source, desc = "Source Action", has = "codeAction" }
       return ret
     end,
   },
