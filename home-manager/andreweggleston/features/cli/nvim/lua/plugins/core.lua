@@ -1,6 +1,6 @@
 return {
   -- disable leap and flash
-  { "ggandor/leap.nvim", enabled = false },
+  { "https://codeberg.org/andyg/leap.nvim", enabled = false },
   {
     "folke/flash.nvim",
     keys = function()
