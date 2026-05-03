@@ -51,7 +51,14 @@
         # "x86_64-darwin"
       ];
 
-      secrets = builtins.fromJSON (builtins.readFile "${self}/secrets.json");
+      secrets =
+        let
+          raw = builtins.readFile "${self}/secrets.json";
+          isEncrypted = builtins.substring 0 1 raw == "\u0000";
+        in
+          if isEncrypted
+          then builtins.throw "secrets.json is still encrypted — run git-crypt unlock"
+          else builtins.fromJSON raw;
 
       mkNixos =
         modules:
