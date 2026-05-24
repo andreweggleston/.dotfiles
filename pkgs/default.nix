@@ -8,4 +8,5 @@
     inherit wrapWine;
   };
   speakersafetyd = pkgs.callPackage ./speakersafetyd.nix {};
+  bitwig-studio6 = pkgs.callPackage ./bitwig-studio6.nix {};
 }

@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   home.packages = [
-    pkgs.bitwig-studio5
+    pkgs.local-pkgs.bitwig-studio6
     pkgs.renoise
     pkgs.audacity
   ];
