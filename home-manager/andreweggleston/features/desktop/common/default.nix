@@ -17,7 +17,7 @@
   };
 
   common-packages =
-    [kitty pkgs.xfce.thunar]
+    [kitty pkgs.thunar]
     ++ attrValues {
       inherit
         (pkgs)

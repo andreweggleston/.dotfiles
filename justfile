@@ -7,7 +7,7 @@ hostname := `hostname | cut -d "." -f 1`
 [macos]
 build target_host=hostname flags="":
   @echo "Building nix-darwin config..."
-  nix --extra-experimental-features 'nix-command flakes'  build ".#darwinConfigurations.{{target_host}}.system" {{flags}}
+  nh darwin build . -H {{target_host}} {{flags}}
 
 # Build the nix-darwin config with the --show-trace flag set
 [macos]
@@ -19,7 +19,7 @@ switch target_host=hostname: (build target_host)
   @echo "switching to new config for {{target_host}}"
   # if macOS updates and overwrites /etc/shells, nix will refuse to update it
   sudo mv /etc/shells /tmp/shells.bak || true
-  sudo ./result/sw/bin/darwin-rebuild switch --flake ".#{{target_host}}"
+  nh darwin switch . -H {{target_host}}
 
 # Reload the skhd (hotkey daemon) service to apply new config. Workaround for config changes not being auto-detected.
 [macos]
@@ -33,7 +33,7 @@ rebuild_flags := `if [ -d /boot/asahi ]; then echo "--impure"; else echo "--impu
 # Build the NixOS configuration without switching to it
 [linux]
 build target_host=hostname flags="":
-	nixos-rebuild build --flake .#{{target_host}} {{rebuild_flags}} {{flags}}
+	nh os build . -H {{target_host}} {{rebuild_flags}} {{flags}}
 
 # Build the NixOS config with the --show-trace flag set
 [linux]
@@ -42,12 +42,12 @@ trace target_host=hostname: (build target_host "--show-trace")
 # Build the NixOS configuration and switch to it.
 [linux]
 switch target_host=hostname:
-  sudo nixos-rebuild switch --flake .#{{target_host}} {{rebuild_flags}}
+  nh os switch . -H {{target_host}} {{rebuild_flags}}
 
 # Build the NixOS configuration and test it without adding a boot entry.
 [linux]
 test target_host=hostname:
-  sudo nixos-rebuild test --flake .#{{target_host}} {{rebuild_flags}}
+  nh os test . -H {{target_host}} {{rebuild_flags}}
 
 # Update flake inputs to their latest revisions
 update:

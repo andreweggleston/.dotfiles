@@ -35,6 +35,7 @@ in
     pkgs.rustup
     pkgs.unstable.alacritty
     pkgs.mosh
+    pkgs.nh
   ];
 
   security.pam.services.sudo_local.touchIdAuth = true;

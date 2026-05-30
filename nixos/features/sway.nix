@@ -9,7 +9,7 @@
     pkgs.wdisplays
     pkgs.xorg.xcursorthemes
     pkgs.vanilla-dmz
-    pkgs.xfce.thunar
+    pkgs.thunar
     pkgs.lxqt.lxqt-policykit # provides a default authentification client for policykit
     pkgs.qt6.qtwayland
   ];
