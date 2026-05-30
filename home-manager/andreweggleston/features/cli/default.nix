@@ -14,6 +14,7 @@
     ./ssh.nix
     ./tmux.nix
     ./neovim.nix
+    ./claude.nix
   ];
 
   home.packages = builtins.attrValues {
@@ -39,9 +40,9 @@
       git-crypt
       wireguard-tools
       dig
-      claude-code
       ;
   };
+
 
   programs = {
     direnv.enable = true;
