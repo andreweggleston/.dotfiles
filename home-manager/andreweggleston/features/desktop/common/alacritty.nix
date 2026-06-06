@@ -15,6 +15,10 @@ in {
         bold.family = "FiraCode Nerd Font Mono";
       };
 
+      terminal = {
+        osc52 = "CopyPaste";
+      };
+
       colors = {
         primary = {
           foreground = "#${colors.base05}";
