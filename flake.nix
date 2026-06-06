@@ -24,11 +24,6 @@
 
     nix-colors.url = "github:misterio77/nix-colors";
 
-    nixvim = {
-      url = "github:andreweggleston/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-
     nur.url = "github:nix-community/nur";
 
     firefox-addons.url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
@@ -56,9 +51,10 @@
           raw = builtins.readFile "${self}/secrets.json";
           isEncrypted = builtins.substring 0 1 raw == "\u0000";
         in
-          if isEncrypted
-          then builtins.throw "secrets.json is still encrypted — run git-crypt unlock"
-          else builtins.fromJSON raw;
+        if isEncrypted then
+          builtins.throw "secrets.json is still encrypted — run git-crypt unlock"
+        else
+          builtins.fromJSON raw;
 
       mkNixos =
         modules:
