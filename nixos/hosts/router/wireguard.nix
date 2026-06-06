@@ -8,6 +8,7 @@
 }:
 let
   nft = pkgs.nftables;
+  gawk = pkgs.gawk;
 in
 {
   systemd.services."wireguard-${interfaces.vpn.name}" = {
@@ -23,8 +24,11 @@ in
         ${nft}/bin/nft chain netdev filter ingress '{ type filter hook ingress devices = { ${interfaces.wan.name}, ${interfaces.lan.name}, ${interfaces.vpn.name} } priority -500; policy accept; }'
 
         # insert accept dport rule 2nd to last in ingress_wan chain in filter table
-          # use handles as in `nft --handle list ruleset`
-        ${nft}/bin/nft add rule netdev filter ingress_wan handle 16 udp dport ${builtins.toString addresses.vpn.port} accept
+        # use the "ingress_wan_drop" rule as a handle to find the bottom of the table
+        # fun awk trick
+        ingress_wan_drop=$(${nft}/bin/nft -a list chain netdev filter ingress_wan \
+          | ${gawk}/bin/awk '/comment "ingress_wan_drop"/ {print $NF}')
+        ${nft}/bin/nft insert rule netdev filter ingress_wan handle "$ingress_wan_drop" udp dport ${builtins.toString addresses.vpn.port} accept
 
         # append accept dport rule to inbound_wan chain in global table
         ${nft}/bin/nft add rule inet global inbound_wan udp dport ${builtins.toString addresses.vpn.port} accept

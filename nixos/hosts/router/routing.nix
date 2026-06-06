@@ -4,6 +4,18 @@
   ...
 }:
 {
+  # nftables has to come up after the nics
+  systemd.services.nftables = {
+    after = [
+      "sys-subsystem-net-devices-${interfaces.wan.name}.device"
+      "sys-subsystem-net-devices-${interfaces.lan.name}.device"
+    ];
+    wants = [
+      "sys-subsystem-net-devices-${interfaces.wan.name}.device"
+      "sys-subsystem-net-devices-${interfaces.lan.name}.device"
+    ];
+  };
+
   networking = {
     firewall.enable = true;
     nftables = {
@@ -43,7 +55,9 @@
             ip6 nexthdr icmpv6 counter log prefix "NFT_DROP_ICMP6: " group 1 drop 
 
             # drop incoming packets that are not locally addressed
-            fib daddr . iif type != local log prefix "NFT_DROP_UNROUTABLE_WAN: " group 1 drop 
+            # NB: wireguard.nix anchors its VPN-port accept rule just before this one
+            # by looking up the "ingress_wan_drop" comment -- keep the comment in sync.
+            fib daddr . iif type != local log prefix "NFT_DROP_UNROUTABLE_WAN: " group 1 drop comment "ingress_wan_drop"
           }
         }
 
