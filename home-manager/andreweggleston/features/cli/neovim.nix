@@ -34,6 +34,7 @@
       pkgs.unstable.luajitPackages.jsregexp
       pkgs.unstable.nixd
       pkgs.unstable.stylua
+      pkgs.unstable.shfmt
       pkgs.unstable.basedpyright
       pkgs.unstable.ruff
       pkgs.unstable.nixfmt

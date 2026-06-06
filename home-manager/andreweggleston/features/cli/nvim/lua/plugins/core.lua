@@ -1,4 +1,7 @@
 return {
+  -- disable mason: LSP servers and tools are provided via nix (see neovim.nix)
+  { "mason-org/mason.nvim", enabled = false },
+  { "mason-org/mason-lspconfig.nvim", enabled = false },
   -- disable leap and flash
   { "https://codeberg.org/andyg/leap.nvim", enabled = false },
   {
@@ -140,14 +143,6 @@ return {
           mode = { "n", "v" },
           desc = "Format Injected Langs",
         },
-      }
-    end,
-  },
-  {
-    "mason-org/mason.nvim",
-    keys = function()
-      return {
-        { "<leader>Cm", "<cmd>Mason<cr>", desc = "Mason" },
       }
     end,
   },
