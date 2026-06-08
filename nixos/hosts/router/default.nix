@@ -102,13 +102,13 @@ let
   interfaces = {
     renames = secrets.hosts.router.interfaces;
     lan = {
-      name = "bond0.1";
+      name = "br-lan";
     };
     dmz = {
-      name = "bond0.2";
+      name = "br-lan.2";
     };
-    bond = {
-      name = "bond0";
+    bridge = {
+      name = "br-lan";
     };
     wan = {
       name = "wan0";

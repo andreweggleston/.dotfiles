@@ -34,7 +34,7 @@
       "net.ipv6.conf.all.forwarding" = true;
       # block martian packets
       "net.ipv4.conf.default.rp_filter" = 1;
-      "net.ipv4.conf.bond0.rp_filter" = 1;
+      "net.ipv4.conf.br-lan.rp_filter" = 1;
       "net.ipv4.conf.wan0.rp_filter" = 1;
       # ipv6 autoconfig on wan0
       "net.ipv6.conf.wan0.accept_ra" = 2;

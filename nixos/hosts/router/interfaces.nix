@@ -18,29 +18,23 @@ in
     map mkUdevInterfaceNameRule interfaces.renames
   );
   networking = {
-    bonds = {
-      "${interfaces.bond.name}" = {
+    bridges = {
+      "${interfaces.bridge.name}" = {
         interfaces = [
           "lan0"
           "lan1"
           "lan2"
           "lan3"
         ]; # TODO: don't hardcode interface names
-        driverOptions = {
-          mode = "802.3ad"; # Use LACP for link aggregation
-          miimon = "100"; # Link monitoring interval (ms)
-        };
       };
     };
 
+    # LAN is served untagged on the bridge itself; DMZ remains a tagged
+    # VLAN riding on top of the bridge.
     vlans = {
-      "${interfaces.lan.name}" = {
-        id = 1;
-        interface = interfaces.bond.name;
-      };
       "${interfaces.dmz.name}" = {
         id = 2;
-        interface = interfaces.bond.name;
+        interface = interfaces.bridge.name;
       };
     };
 
