@@ -65,13 +65,6 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-  networking.firewall.allowedTCPPorts = [
-    25565
-  ];
-  networking.firewall.allowedUDPPorts = [
-    25565
-  ];
-
   # Set your time zone. Unnecessary if automatic-timezoned is enabled
   # time.timeZone = "America/New_York";
 
