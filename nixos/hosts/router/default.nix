@@ -33,6 +33,11 @@ let
       host = "nascar";
       port = "8112";
     }
+    {
+      name = "forgejo";
+      host = "nascar";
+      port = "3000";
+    }
   ];
   addresses = {
     dmz = {
