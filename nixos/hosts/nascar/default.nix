@@ -19,6 +19,7 @@
 
     ./samba.nix
     ./forgejo.nix
+    ./forgejo-runner.nix
   ];
 
   home-manager.users.andreweggleston = import ../../../home-manager/andreweggleston/hosts/nascar.nix;
