@@ -28,6 +28,32 @@ in
         "docker:docker://node:20-bookworm"
         "ubuntu-latest:docker://node:20-bookworm"
       ];
+
+      # allowed docker volumes that ci jobs can mount
+      settings.container.valid_volumes = [
+        "forgejo-ci-nix-*"
+      ];
+    };
+  };
+
+  # run gc in the volumes weekly
+  systemd.services.forgejo-ci-nix-gc = {
+    description = "GC the Forgejo CI /nix cache volumes";
+    serviceConfig.Type = "oneshot";
+    path = [ pkgs.docker ];
+    script = ''
+      for vol in forgejo-ci-nix-ordersender forgejo-ci-nix-marketsim; do
+        docker volume inspect "$vol" >/dev/null 2>&1 || continue
+        docker run --rm -v "$vol":/nix nixos/nix:latest \
+          nix-collect-garbage --delete-older-than 30d || true
+      done
+    '';
+  };
+  systemd.timers.forgejo-ci-nix-gc = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "weekly";
+      Persistent = true;
     };
   };
 }
