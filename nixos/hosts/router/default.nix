@@ -17,26 +17,31 @@ let
       name = "jellyfin";
       host = "nascar";
       port = "8096";
+      public = true;
     }
     {
       name = "radarr";
       host = "nascar";
       port = "7878";
+      public = false;
     }
     {
       name = "sonarr";
       host = "nascar";
       port = "8989";
+      public = false;
     }
     {
       name = "deluge";
       host = "nascar";
       port = "8112";
+      public = false;
     }
     {
       name = "forgejo";
       host = "nascar";
       port = "3000";
+      public = false;
     }
   ];
   addresses = {

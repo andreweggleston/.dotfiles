@@ -62,11 +62,21 @@
         }
 
         table inet global {
+          # RFC1918 addresses
+          set private_v4 {
+            type ipv4_addr
+            flags interval
+            elements = { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 }
+          }
+
           chain inbound_wan {
             ct state new log prefix "NFT_INBOUND_NEW_CONN: " group 1 limit rate 5/second
             # accept all icmp requests -- TODO this could be constrained or even rate-limited
             ip protocol icmp accept
             ip6 nexthdr icmpv6 accept
+
+            # reverse proxy on wan0 but only if both src+dest are private
+            ip saddr @private_v4 ip daddr @private_v4 tcp dport { 80, 443 } accept comment "reverse proxy, private-to-private only"
           }
           chain inbound_lan {
             # accept all LAN traffic--yolo!
@@ -93,7 +103,7 @@
 
             # always prevent ULA traffic from being forwarded to WAN
             ip6 saddr ${addresses.lan.ipv6.subnet} oifname ${interfaces.wan.name} drop
-            
+
             # log outbound connections
             ip saddr ${addresses.lan.ipv4.subnet} oifname wan0 ct state new log prefix "NFT_FORWARD_NEW_CONN: " group 1 limit rate 5/second
 
