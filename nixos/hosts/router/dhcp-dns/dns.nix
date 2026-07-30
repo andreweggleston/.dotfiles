@@ -174,16 +174,29 @@ in
     ReadWritePaths = [ "/var/named" ];
   };
 
+  # rdnc reload when the zone changes
+  systemd.services.bind.reloadTriggers = [ internal-zoneFile ];
+
   system.activationScripts.copyZoneFile = {
     text = ''
       mkdir -p /var/named/zones
-      cp ${home-zoneFile} /var/named/zones/${secrets.internal_domain}.zone
-      cp ${dmz-zoneFile} /var/named/zones/peckdmz.home.arpa.zone
+
+      # seed the zones only if they don't exist, and remove any leftover journal
+      seed() {
+        if [ ! -e "$2" ]; then
+          cp "$1" "$2"
+          rm -f "$2.jnl"
+          chmod 0644 "$2"
+        fi
+      }
+      seed ${home-zoneFile} /var/named/zones/${secrets.internal_domain}.zone
+      seed ${dmz-zoneFile} /var/named/zones/peckdmz.home.arpa.zone
+
+      # internal.${secrets.external_domain} is static (no allow-update), so it can be reloaded on every activation
       cp ${internal-zoneFile} /var/named/zones/internal.${secrets.external_domain}.zone
-      chown named:named -R /var/named/zones
-      chmod 0644 /var/named/zones/${secrets.internal_domain}.zone
-      chmod 0644 /var/named/zones/peckdmz.home.arpa.zone
       chmod 0644 /var/named/zones/internal.${secrets.external_domain}.zone
+
+      chown named:named -R /var/named/zones
     '';
   };
 }
