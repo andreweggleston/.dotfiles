@@ -58,7 +58,7 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_7_1;
   };
   networking.hostName = "drew-pc"; # Define your hostname.
 
