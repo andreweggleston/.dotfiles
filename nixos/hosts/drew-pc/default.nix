@@ -110,5 +110,13 @@
       pkgs.distrobox
     ];
 
+  services.udev.extraRules = ''
+    # allow access to tobii eyetracker 5 without root
+    # bootloader mode
+    SUBSYSTEM=="usb", ATTR{idVendor}=="2104", ATTR{idProduct}=="0102", MODE="0666", TAG+="uaccess"
+    # live mode
+    SUBSYSTEM=="usb", ATTR{idVendor}=="2104", ATTR{idProduct}=="0313", MODE="0666", TAG+="uaccess"
+  '';
+
   system.stateVersion = "24.05"; # Did you read the comment?
 }
