@@ -1,10 +1,10 @@
 # This file defines overlays
-{inputs, ...}: {
+{ inputs, ... }: {
   # This one brings our custom packages from the 'pkgs' directory
   additions = final: _prev: {
     # nest everything under a namespace that's not likely to collide
     # with anything in nixpkgs
-    local-pkgs = import ../pkgs {pkgs = final;};
+    local-pkgs = import ../pkgs { pkgs = final; };
   };
 
   # This one contains whatever you want to overlay
@@ -16,6 +16,11 @@
     # });
     renoise = prev.renoise.override {
       releasePath = /home/andreweggleston/Downloads/rns_344_linux_x86_64.tar.gz;
+    };
+
+    # add plugins that aren't in nixpkgs to pkgs.obs-studio-plugins
+    obs-studio-plugins = prev.obs-studio-plugins // {
+      obs-wayland-hotkeys = final.qt6Packages.callPackage ./obs-wayland-hotkeys.nix { };
     };
   };
 
