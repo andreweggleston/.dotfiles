@@ -2,9 +2,14 @@
   lib,
   pkgs,
   config,
+  inputs,
   ...
 }: {
+  nixpkgs.overlays = [
+    inputs.claude-code.overlays.default
+  ];
+
   home.packages = [
-    pkgs.unstable.claude-code
+    pkgs.claude-code
   ];
 }
