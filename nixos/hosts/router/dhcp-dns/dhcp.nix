@@ -163,4 +163,31 @@
       };
     };
   };
+
+  # interfaces (bridge devices) need to be up so that sockets can be bound
+  systemd.services.kea-dhcp4-server = {
+    after = [
+      "${interfaces.lan.name}-netdev.service"
+      "${interfaces.dmz.name}-netdev.service"
+      "network-addresses-${interfaces.lan.name}.service"
+      "network-addresses-${interfaces.dmz.name}.service"
+    ];
+    wants = [
+      "${interfaces.lan.name}-netdev.service"
+      "${interfaces.dmz.name}-netdev.service"
+      "network-addresses-${interfaces.lan.name}.service"
+      "network-addresses-${interfaces.dmz.name}.service"
+    ];
+  };
+
+  systemd.services.kea-dhcp6-server = {
+    after = [
+      "${interfaces.lan.name}-netdev.service"
+      "network-addresses-${interfaces.lan.name}.service"
+    ];
+    wants = [
+      "${interfaces.lan.name}-netdev.service"
+      "network-addresses-${interfaces.lan.name}.service"
+    ];
+  };
 }
