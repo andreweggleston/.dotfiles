@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   secrets,
   ...
 }:
@@ -17,6 +18,9 @@ in
 
   services.forgejo = {
     enable = true;
+
+    # latest release line instead of the module's default (forgejo-lts)
+    package = pkgs.forgejo;
 
     # storage on the zfs tank pool, this also is the homedir of the run user
     stateDir = "/nascar/forgejo";
