@@ -3,11 +3,16 @@ default: switch
 
 hostname := `hostname | cut -d "." -f 1`
 
+# sometimes build jobs cause machine to chug and get oom killed, so allow overriding of maxjobs or cores
+max_jobs := env("NIX_MAX_JOBS", "")
+cores := env("NIX_CORES", "")
+job_flags := (if max_jobs == "" { "" } else { "--max-jobs " + max_jobs }) + (if cores == "" { "" } else { " --cores " + cores })
+
 # Build the nix-darwin system configuration without switching to it
 [macos]
 build target_host=hostname flags="":
   @echo "Building nix-darwin config..."
-  nh darwin build . -H {{target_host}} {{flags}}
+  nh darwin build . -H {{target_host}} {{job_flags}} {{flags}}
 
 # Build the nix-darwin config with the --show-trace flag set
 [macos]
@@ -19,7 +24,7 @@ switch target_host=hostname: (build target_host)
   @echo "switching to new config for {{target_host}}"
   # if macOS updates and overwrites /etc/shells, nix will refuse to update it
   sudo mv /etc/shells /tmp/shells.bak || true
-  nh darwin switch . -H {{target_host}}
+  nh darwin switch . -H {{target_host}} {{job_flags}}
 
 # Reload the skhd (hotkey daemon) service to apply new config. Workaround for config changes not being auto-detected.
 [macos]
@@ -33,7 +38,7 @@ rebuild_flags := `if [ -d /boot/asahi ]; then echo "--impure"; else echo "--impu
 # Build the NixOS configuration without switching to it
 [linux]
 build target_host=hostname flags="":
-	nh os build . -H {{target_host}} {{rebuild_flags}} {{flags}}
+	nh os build . -H {{target_host}} {{rebuild_flags}} {{job_flags}} {{flags}}
 
 # Build the NixOS config with the --show-trace flag set
 [linux]
@@ -42,12 +47,12 @@ trace target_host=hostname: (build target_host "--show-trace")
 # Build the NixOS configuration and switch to it.
 [linux]
 switch target_host=hostname:
-  nh os switch . -H {{target_host}} {{rebuild_flags}}
+  nh os switch . -H {{target_host}} {{rebuild_flags}} {{job_flags}}
 
 # Build the NixOS configuration and test it without adding a boot entry.
 [linux]
 test target_host=hostname:
-  nh os test . -H {{target_host}} {{rebuild_flags}}
+  nh os test . -H {{target_host}} {{rebuild_flags}} {{job_flags}}
 
 # Update flake inputs to their latest revisions
 update:
