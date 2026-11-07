@@ -5,6 +5,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 {
@@ -42,7 +43,13 @@
       powerManagement.finegrained = false;
       open = false;
       nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.production;
+      # use unstable's nvidia-x11 expression to get newer drivers faster
+      # this fixes lot of issues from using latest kernel
+      package =
+        (config.boot.kernelPackages.callPackage
+          "${inputs.nixpkgs-unstable}/pkgs/os-specific/linux/nvidia-x11"
+          { }
+        ).new_feature;
     };
     graphics = {
       enable = true;
@@ -55,11 +62,22 @@
   # Bootloader.
   boot = {
     loader = {
-      systemd-boot.enable = true;
+      systemd-boot = {
+        enable = true;
+        # keep 5 bootable generations
+        configurationLimit = 5;
+      };
       efi.canTouchEfiVariables = true;
     };
-    kernelPackages = pkgs.linuxPackages_7_1;
+    kernelPackages = pkgs.linuxPackages_latest;
   };
+  # gc entries more than a month old every week
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+
   networking.hostName = "drew-pc"; # Define your hostname.
 
   # Enable networking
