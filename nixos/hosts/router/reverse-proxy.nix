@@ -9,7 +9,7 @@
 let
   caddypkg = pkgs.caddy.withPlugins {
     plugins = [ "github.com/caddy-dns/porkbun@v0.3.1" ];
-    hash = "sha256-JtzeWz9GdW/+1Qft5nU9diPkFQvPGxQkgR8n8w+ryoI=";
+    hash = "sha256-3XnnBdOW8A+LmmcqR94v1ZkyMoMB3EfBWFv0uBzz4cA=";
   };
 
   # homelab LAN + vpn source ranges
